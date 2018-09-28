@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+ 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Break!</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="index.css">
-
+  <title>Break! login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+ 
 </head>
-
+ 
 <body>
-	<!-- nav bar start -->
+ 
+  <!-- nav bar start -->
   <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display -->
@@ -56,12 +58,55 @@
 <br>
  
   <!-- nav bar end -->
-  
-    <h1>Break!</h1>
-    <canvas id="canvas" width="500px" height="800px"></canvas>
+ 
+ 
+ 
+  <!-- 점보트론 시작 -->
+  <div class="container">
+    <div class="jumbotron">
+      <h1>
+        <span style="color:white">welcome to Break!.</span>
+      </h1>
+      <p>
+        <span style="color:white">Enjoy the game.</span>
+      </p>
+    </div>
+  </div>
+  <br>
+  <!-- 점보트론 끝 -->
+ 
+ 
+ 
+  <!-- Leaderboard -->
+  <div class="container">
+    <hr>
+    <h3></h3>
+    <br>
+    <div class="Leaderboard"></div>
+  </div>
+ 
+ 
+  <!--스크립트 부분. -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
+      authDomain: "break-a4931.firebaseapp.com",
+      databaseURL: "https://break-a4931.firebaseio.com",
+      projectId: "break-a4931",
+      storageBucket: "break-a4931.appspot.com",
+      messagingSenderId: "717477751137"
+    };
+    firebase.initializeApp(config);
+ 
+    //firebaseEmailAuth = firebase.auth();
+    //firebaseDatabase = firebase.database();
+ 
+  </script>
+ 
+ 
+ 
 </body>
-
-<script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
-<script src="./js/index.js"></script>
-
+ 
 </html>

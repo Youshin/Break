@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>Break! - Sign up</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <!-- nav bar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="./main.html">Break!</a>
+          </div>
+  
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li class="active">
+                      <a href="./main.html">Home</a>
+                  </li>
+                  <li>
+                      <a href="./index.html">play game</a>
+                  </li>
+                   <li>
+                      <a id="joinmenu" href="./signup.html">sign up</a>
+                  </li>
+                  <li>
+                      <a id="loginmenu" href="./login.html">log in</a>
+                  </li>
+ 
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+  </nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+ 
+  <!-- nav bar end -->
+ 
+ 
+<!-- sign up form -->
+<div class="container">
+    <h1>Welcome!!</h1>
+ 
+    <div class="form-group">
+      <label for="email">Email address:</label>
+      <input type="email" class="form-control" id="email">
+    </div>
+ 
+    <div class="form-group">
+            <label for="name">Nick Name:</label>
+            <input type="text" class="form-control" id="name">
+    </div>
+ 
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="password" class="form-control" id="pwd">
+    </div>
+ 
+    <button type="button" class="btn btn-default join">Sign Up!</button>
+ 
+</div>
+<!-- sign up form end -->
+ 
+ 
+  <!-- firebase script -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+  <script>
+    var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+    var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+    var userInfo; //가입한 유저의 정보. object 타입
+    //파이어 베이스 초기화 코드
+
+    var config = {
+      apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
+      authDomain: "break-a4931.firebaseapp.com",
+      databaseURL: "https://break-a4931.firebaseio.com",
+      projectId: "break-a4931",
+      storageBucket: "break-a4931.appspot.com",
+      messagingSenderId: "717477751137"
+    };
+
+    firebase.initializeApp(config);
+ 
+    firebaseEmailAuth = firebase.auth();
+    firebaseDatabase = firebase.database();
+ 
+ 
+//jquery 
+$(document).ready(function(){
+  
+  //press sign up button
+  $(document).on('click','.join',function(){
+ 
+    //get values using jquery 
+    var email = $('#email').val();
+    var password = $('#pwd').val();
+    name = $('#name').val();
+ 
+// firebase auth module when press sign up by email 이메일로 가입 버튼 눌렀을 때 작동되는 함수 - firebase 인증 모듈
+firebaseEmailAuth.createUserWithEmailAndPassword(email, password).then(function(user) {
+    
+    userInfo = user; //가입 후 callBack 함수로 생성된 유저의 정보가 user에 담겨서 넘어온다. 전역변수에 할당.
+ 
+    // success log
+    console.log("userInfo/"+userInfo); // obj type
+    console.log("userInfo.currentUser/"+userInfo.currentUser); // not working
+    console.log("userInfo.uid/"+userInfo.uid); // not working yet
+    
+    
+    logUser(); 
+ 
+}, function(error) {
+    // error
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    alert(errorMessage);
+   
+});
+ 
+// when signed up successfully, not the same auth module with above. database module
+// 가입 성공했을 때 호출 되는 함수 - 위의 firebase의 인증 모듈과 다른 database 모듈임을 확인하자.
+function logUser(){
+    var ref = firebaseDatabase.ref("users/"+userInfo.uid); //저장될 곳을 users라는 부모 키를 레퍼런스로 지정.
+    
+    //save type
+    var obj = {
+        name: name,
+    };
+ 
+    ref.set(obj); // 고유한 자식 키가 하나 생셩이 되면서 json 삽입
+    alert("Signed up successfully");
+ 
+    //메인 페이지로 이동시키고 세션 저장시키기
+    window.location.href = "./main.html"
+}
+ 
+ 
+  });
+});
+  </script>
+ 
+ 
+</body>
+</html>
