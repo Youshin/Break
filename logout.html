@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+ 
+<head>
+  <title>Break! login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+ 
+</head>
+ 
+<body>
+ 
+  <!-- nav bar start -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="./main.html">Break!</a>
+          </div>
+  
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li class="active">
+                      <a href="./main.html">Home</a>
+                  </li>
+                  <li>
+                      <a href="./index.html">play game</a>
+                  </li>
+                  <li>
+                      <a id="signupmenu" href="./signup.html">sign up</a>
+                  </li>
+                  <li>
+                      <a id="loginmenu" href="./login.html">log in</a>
+                  </li>
+ 
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+  </nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+ 
+  <!-- nav bar end -->
+ 
+
+
+<div class="container">
+        <h1>successfully loged out! :)</h1>
+    </div>
+  
+
+  <!--스크립트 부분. 자신의 스크립트 코드로 변경하세요! -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+  <script>
+    var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+    var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+    var userInfo; //가입한 유저의 정보. object 타입
+    //파이어 베이스 초기화 코드
+     var config = {
+      apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
+      authDomain: "break-a4931.firebaseapp.com",
+      databaseURL: "https://break-a4931.firebaseio.com",
+      projectId: "break-a4931",
+      storageBucket: "break-a4931.appspot.com",
+      messagingSenderId: "717477751137"
+    };
+    firebase.initializeApp(config);
+     //인증모듈 객체 가져오기
+    firebaseEmailAuth = firebase.auth();
+
+    firebaseEmailAuth.signOut().then(function() {
+          //alert("로그아웃 되었습니다")
+          //메인 페이지로 이동시키고 세션 저장시키기
+          alert("logout successfully!")
+           window.location.href = "./main.html"
+           
+    }).catch(function(error) {
+    if(error){
+          alert("logout failed");
+    }
+});
+
+    </script>    
+</body>
+</html>
