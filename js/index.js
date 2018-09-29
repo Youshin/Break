@@ -5,10 +5,13 @@ $(function() {
         y = 750,
         radius = 7;
     var dx = 2,
-        dy = 7;
+        dy = -7;
     var ctx;
     var anim;
     var gameOn;
+    var bricks = [];
+    var balls = [];
+    var score = 0;
     var BRICKHEIGHT = 0, BRICKWIDTH = 0;
 
     function init() {
@@ -16,6 +19,8 @@ $(function() {
         ctx = $('#canvas')[0].getContext('2d');
         WIDTH = $('#canvas').width();
         HEIGHT = $('#canvas').height();
+        x = WIDTH / 2;
+        y = HEIGHT - 3;
         gameOn = false; // whether the ball is in motion
         // x = WIDTH / 2;
         // y = HEIGHT - 1;
@@ -29,6 +34,7 @@ $(function() {
 
         clear();
         ball(x, y, radius);
+        $('#score').text("Score: " + score);
         if(gameOn){
           x += dx;
           y += dy;
@@ -38,7 +44,7 @@ $(function() {
           if(y < 0 + radius){
             dy = -dy;
           }
-          if( y > HEIGHT - radius - 5){
+          if( y > HEIGHT - radius - 2){
             gameOn = false;
             dy = -dy;
           }
@@ -47,9 +53,9 @@ $(function() {
         //draw bricks
         for (i = 0; i < NROWS; i++) {
             for (j = 0; j < NCOLS; j++) {
-                if (bricks[i][j] == 1) {
+                if (bricks[i][j].appear == 1) {
                     rect(j * BRICKWIDTH, i * BRICKHEIGHT
-                        , BRICKWIDTH - PADDING, BRICKHEIGHT - PADDING);
+                        , BRICKWIDTH - PADDING, BRICKHEIGHT - PADDING, i, j);
                 }
             }
         }
@@ -58,9 +64,13 @@ $(function() {
         var row = Math.floor(y/(BRICKHEIGHT+PADDING));
         var col = Math.floor(x/(BRICKWIDTH+PADDING));
         if(row < NROWS){
-            if(bricks[row][col] == 1){
+            if(bricks[row][col].appear == 1){
                 dy = -dy;
-                bricks[row][col] = 0;
+                bricks[row][col].number = bricks[row][col].number - 1;
+                if(bricks[row][col].number == 0){
+                    bricks[row][col].appear = 0;
+                    score++;
+                }
             }
         }
         // if(y == HEIGHT - 5){
@@ -78,24 +88,32 @@ $(function() {
         ctx.closePath();
         ctx.fill();
     }
-    function rect(x, y, w, h){
+    function rect(x, y, w, h, i, j){
         ctx.beginPath();
         ctx.rect(x, y, w, h);
         ctx.closePath();
-        ctx.fillStyle = getRndColor();
+        ctx.fillStyle = bricks[i][j].color;//getRndColor();
         ctx.fill();
+        ctx.fillStyle = "white";
+        ctx.fillText(bricks[i][j].number, x + BRICKWIDTH / 2 - 5, y + BRICKHEIGHT / 2 + 3);
     }
     function init_bricks() {
         NROWS = 10;
         NCOLS = 10;
         PADDING = 1;
         BRICKWIDTH = (WIDTH / NCOLS);
-        BRICKHEIGHT = 15;
-        bricks = new Array(NROWS);
+        BRICKHEIGHT = 20;
+        //bricks = new Array(NROWS);
+        //var bricks = [];
         for (i = 0; i < NROWS; i++) {
-            bricks[i] = new Array(NCOLS);
+            // bricks[i] = new Array(NCOLS);
+            bricks[i] = [];
             for (j = 0; j < NCOLS; j++) {
-                bricks[i][j] = Math.round(Math.random() + 0.2);;
+                brick = {};
+                brick.color = getRndColor();
+                brick.appear = Math.round(Math.random());
+                brick.number = 2;
+                bricks[i][j] = brick;//Math.round(Math.random() + 0.2);
             }
         }
     }
@@ -131,4 +149,3 @@ $(function() {
     init_bricks();
 
 });
-
