@@ -20,6 +20,8 @@ $(function () {
     var bricklevel = 2;
     var gameoff = false;
     var checkifbrick = 0;
+    var time = 60;
+    var fps = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -46,6 +48,8 @@ $(function () {
         balls.push(aBall);
         bricklevel = 2;
         score = 0;
+        time = 60;
+        fps = 60;
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
         window.requestAnimationFrame(draw);
@@ -53,12 +57,17 @@ $(function () {
     }
 
     function draw() {
-
+        
         clear();
         printBalls();
+        
         //ball(x, y, radius);
         $('#score').text("Score: " + score);
+        $('#time').text("Time: " + time.toFixed(2));
+        
         if (gameOn) {
+            time -= 1/fps;
+            
             for (m = 0; m < balls.length; m++) {
                 balls[m].x += balls[m].dx;
                 balls[m].y += balls[m].dy;
@@ -124,7 +133,10 @@ $(function () {
         // else{
         //
         // }
-        if (NROWS >= 19) {
+        
+        
+        //game over condition
+        if (NROWS >= 8 || time <= 0) {
             gameOn = true;
             gameoff = true;
             gameover();
@@ -176,6 +188,7 @@ $(function () {
     }
 
     function gameover() {
+        $('#time').text("Time: " + time.toFixed(2));
         rectgo(0, 0, WIDTH, HEIGHT, "black");
         text("Game Over", "75px Comic Sans MS", 65, 300, "white");
         text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
