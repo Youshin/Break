@@ -19,6 +19,7 @@ $(function () {
     var ballsLength = 0;
     var bricklevel = 2;
     var gameoff = false;
+    var checkifbrick = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -43,6 +44,8 @@ $(function () {
         aBall.y = y;
         aBall.bounced = 0;
         balls.push(aBall);
+        bricklevel = 2;
+        score = 0;
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
         window.requestAnimationFrame(draw);
@@ -88,7 +91,7 @@ $(function () {
                     //   balls[m].dx = 0;
                     // }
 
-                    if (numBallsOnGround == ballsLength && NROWS < 19) {
+                    if (numBallsOnGround == ballsLength) {
                         for (j = 0; j < balls.length; ++j) { // brings all balls together after all the balls are on ground
                             balls[j].x = balls[firstBallOnGroundIndex].x;
                             balls[j].y = balls[firstBallOnGroundIndex].y;
@@ -113,11 +116,6 @@ $(function () {
                         brickrow[newBallPos].appear = 2;
                         bricks.unshift(brickrow);
 
-                    } else if (NROWS >= 19) {
-                        gameOn = true;
-                        gameoff = true;
-                        gameover();
-                        return;
                     }
                 }
             }
@@ -126,7 +124,12 @@ $(function () {
         // else{
         //
         // }
-
+        if (NROWS >= 19) {
+            gameOn = true;
+            gameoff = true;
+            gameover();
+            return;
+        }
 
         //draw bricks
         for (i = 0; i < NROWS; i++) {
@@ -166,6 +169,7 @@ $(function () {
                 }
             }
         }
+
         // if(y == HEIGHT - 5){
         //     gameOn = false;
         // }
@@ -176,7 +180,6 @@ $(function () {
         text("Game Over", "75px Comic Sans MS", 65, 300, "white");
         text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
         rectgo(200, 600, 100, 50, "white");
-        score = 0;
     }
 
     function clear() {
@@ -308,8 +311,7 @@ $(function () {
             ballHitGround = 0;
             firstBallOnGroundIndex = 0;
             ballsLength = balls.length;
-        }
-        else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
+        } else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
             gameoff = false;
             balls = [];
             init();
