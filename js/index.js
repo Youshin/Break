@@ -12,7 +12,11 @@ $(function() {
     var bricks = [];
     var balls = [];
     var score = 0;
-    ballCount = 1;
+    var ballCount = 1;
+    var ballHitGround = 0;
+    var firstBallOnGroundIndex = 0;
+    var numBallsOnGround = 0;
+    var ballsLength = 0;
 
 
     var BRICKHEIGHT = 0, BRICKWIDTH = 0;
@@ -24,11 +28,18 @@ $(function() {
         WIDTH = $('#canvas').width();
         HEIGHT = $('#canvas').height();
         x = WIDTH / 2;
-        y = HEIGHT - 3;
+        y = HEIGHT - 7;
         gameOn = false; // whether the ball is in motion
         // x = WIDTH / 2;
         // y = HEIGHT - 1;
         ctx.setLineDash([3, 10]);
+        var aBall = {};
+        aBall.dx = dx;
+        aBall.dy = dy;
+        aBall.x = x;
+        aBall.y = y;
+        aBall.bounced = 0;
+        balls.push(aBall);
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
         window.requestAnimationFrame(draw);
@@ -37,40 +48,70 @@ $(function() {
     function draw() {
 
         clear();
-        ball(x, y, radius);
+        printBalls();
+        //ball(x, y, radius);
         $('#score').text("Score: " + score);
         if(gameOn){
-          x += dx;
-          y += dy;
-          if(x > WIDTH - radius || x < 0 + radius){
-            dx = -dx;
-          }
-          if(y < 0 + radius){
-            dy = -dy;
-          }
-          if( y > HEIGHT - radius - 2){
-            gameOn = false;
-            dy = -dy;
-            //if()
-            NROWS++;
-            brickrow = [];
-            emptyPositions = [];
-            for (j = 0; j < NCOLS; j++) {
-                brick = {};
-                brick.color = getRndColor();
-                brick.appear = Math.round(Math.random() - 0.2);
-                if(brick.appear == 0){
-                  emptyPositions.push(j);
+            for(m = 0; m < balls.length; m++){
+                balls[m].x += balls[m].dx;
+                balls[m].y += balls[m].dy;
+                if(balls[m].x > WIDTH - radius || balls[m].x < 0 + radius){
+                  balls[m].dx = -balls[m].dx;
+                  balls[m].bounced = 1;
                 }
-                brick.number = 2;
-                brickrow[j] = brick;//Math.round(Math.random() + 0.2);
-            }
-            randomEmptyPos = Math.floor(Math.random()*(emptyPositions.length));
-            newBallPos = emptyPositions[randomEmptyPos];
-            brickrow[newBallPos].appear = 2;
-            bricks.unshift(brickrow);
-          }
+                if(balls[m].y < 0 + radius){
+                  balls[m].dy = -balls[m].dy;
+                  balls[m].bounced = 1;
+                }
 
+
+                // ball hit ground
+                if( balls[m].y > HEIGHT - radius-2 && balls[m].bounced == 1){
+                    //alert(numBallsOnGround);
+                    numBallsOnGround++;
+                    if(ballHitGround == 0){
+                        ballHitGround = 1;
+
+                        firstBallOnGroundIndex = m;
+                    }
+                    balls[m].dy = 0;
+                    balls[m].dx = 0;
+                    balls[m].bounced = 0;
+                    // else {
+                    //   balls[m].y = balls[firstBallOnGroundIndex].y;
+                    //   balls[m].x = balls[firstBallOnGroundIndex].x;
+                    //   balls[m].dy = 0;
+                    //   balls[m].dx = 0;
+                    // }
+                    if(numBallsOnGround == ballsLength){
+                        for(j = 0; j < balls.length; ++j){ // brings all balls together after all the balls are on ground
+                            balls[j].x = balls[firstBallOnGroundIndex].x;
+                            balls[j].y = balls[firstBallOnGroundIndex].y;
+                        }
+                        gameOn = false;
+                        NROWS++;
+                        brickrow = [];
+                        emptyPositions = []; // tracks all position in the row that don't have bricks
+                        for (j = 0; j < NCOLS; j++) {
+                            brick = {};
+                            brick.color = getRndColor();
+                            brick.appear = Math.round(Math.random() + 0.1);
+                            if(brick.appear == 0){
+                              emptyPositions.push(j);
+                            }
+                            brick.number = 2;
+                            brickrow[j] = brick;//Math.round(Math.random() + 0.2);
+                        }
+                        randomEmptyPos = Math.floor(Math.random()*(emptyPositions.length));// to put an extra new ball in a random empty position
+                        newBallPos = emptyPositions[randomEmptyPos];
+                        brickrow[newBallPos].appear = 2;
+                        bricks.unshift(brickrow);
+                    }
+
+                    //if()
+                }
+
+            }
           anim = window.requestAnimationFrame(draw);
         }
         // else{
@@ -92,20 +133,30 @@ $(function() {
         }
 
         //Have We Hit a Bricks?
-        var row = Math.floor((y+radius)/(BRICKHEIGHT+PADDING));
-        var col = Math.floor((x+radius)/(BRICKWIDTH+PADDING));
-        if(row < NROWS){
-            if(bricks[row][col].appear == 1){
-                dy = -dy;
-                bricks[row][col].number--;// = bricks[row][col].number - 1;
-                if(bricks[row][col].number == 0){
-                    bricks[row][col].appear = 0;
-                    score++;
+        for(i = 0; i < balls.length; ++i){
+            var row = Math.floor((balls[i].y+radius)/(BRICKHEIGHT+PADDING));
+            var col = Math.floor((balls[i].x+radius)/(BRICKWIDTH+PADDING));
+            if(row < NROWS){
+                if(bricks[row][col].appear == 1){
+                    balls[i].dy = -balls[i].dy;
+                    balls[i].bounced = 1;
+                    bricks[row][col].number--;// = bricks[row][col].number - 1;
+                    if(bricks[row][col].number == 0){
+                        bricks[row][col].appear = 0;
+                        score++;
+                    }
                 }
-            }
-            else if(bricks[row][col].appear == 2){
-                ballCount++;
-                bricks[row][col].appear = 0;
+                else if(bricks[row][col].appear == 2){
+                    ballCount++;
+                    aNewBall = {};
+                    aNewBall.dx = 0;
+                    aNewBall.dy = 0;
+                    aNewBall.y = HEIGHT - 2*radius;
+                    aNewBall.x = col*BRICKWIDTH + BRICKWIDTH/2;
+                    aNewBall.bounced = 0;
+                    balls.push(aNewBall);
+                    bricks[row][col].appear = 0;
+                }
             }
         }
         // if(y == HEIGHT - 5){
@@ -140,11 +191,10 @@ $(function() {
       ctx.closePath();
       ctx.fill();
     }
-    function dropNewBall(i, j){
-      bricks[i][j].appear = 0;
-      var xnb = j * BRICKWIDTH + BRICKWIDTH/2;
-      var ynb = i * BRICKHEIGHT + BRICKHEIGHT/2;
-
+    function printBalls(){
+        for(i = 0; i < balls.length; i++){
+            ball(balls[i].x, balls[i].y, radius);
+        }
     }
     function init_bricks() {
         NROWS = 5;
@@ -161,7 +211,7 @@ $(function() {
             for (j = 0; j < NCOLS; j++) {
                 brick = {};
                 brick.color = getRndColor();
-                brick.appear = Math.round(Math.random() - 0.2);
+                brick.appear = Math.round(Math.random() + 0.1);
                 if(brick.appear == 0){
                   emptyPositions.push(j);
                 }
@@ -187,7 +237,7 @@ $(function() {
             clear();
             draw();
             ctx.beginPath();
-            ctx.moveTo(x,y);
+            ctx.moveTo(balls[0].x,balls[0].y);
             ctx.lineTo(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
             ctx.closePath();
             ctx.stroke();
@@ -197,7 +247,7 @@ $(function() {
 
     $('#canvas').mousedown(function(e){
       ctx.beginPath();
-      ctx.moveTo(x,y);
+      ctx.moveTo(balls[0].x,balls[0].y);
       ctx.lineTo(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
       ctx.closePath();
       ctx.stroke();
@@ -205,14 +255,27 @@ $(function() {
 
 
     $('#canvas').mouseup(function(e){
+      clear();
+
       if(gameOn == false){
         gameOn = true;
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
-        var multiplier = mx / my;
-        dy = (my - y) / 40;
-        dx = (mx - x) / 40;
+        balls[0].dy = (my - balls[0].y) / 40;
+        balls[0].dx = (mx - balls[0].x) / 40;
+        balls[0].bounced = 0;
         draw();
+        for(i = 1; i < balls.length; ++i){
+            // while(x++ < 100000000);
+            balls[i].dy = (my - balls[i].y) / 40;
+            balls[i].dx = (mx - balls[i].x) / 40;
+            balls[i].bounced = 0;
+            // draw();
+        }
+        numBallsOnGround = 0;
+        ballHitGround = 0;
+        firstBallOnGroundIndex = 0;
+        ballsLength = balls.length;
       }
     });
 
@@ -220,8 +283,17 @@ $(function() {
         var r = 255*Math.random()|0,
         g = 255*Math.random()|0,
         b = 255*Math.random()|0;
-    return 'rgb(' + r + ',' + g + ',' + b + ')';
-}
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds){
+                break;
+            }
+        }
+    }
 
     init();
 
