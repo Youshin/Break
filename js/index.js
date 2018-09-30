@@ -136,7 +136,7 @@ $(function () {
         
         
         //game over condition
-        if (NROWS >= 8 || time <= 0) {
+        if (NROWS >= 19 || time <= 0) {
             gameOn = true;
             gameoff = true;
             gameover();
@@ -188,11 +188,11 @@ $(function () {
     }
 
     function gameover() {
-        $('#time').text("Time: " + time.toFixed(2));
         rectgo(0, 0, WIDTH, HEIGHT, "black");
         text("Game Over", "75px Comic Sans MS", 65, 300, "white");
         text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
         rectgo(200, 600, 100, 50, "white");
+        text("Restart", "20px Comic Sans MS", 215, 630, "black");
     }
 
     function clear() {
@@ -324,7 +324,10 @@ $(function () {
             ballHitGround = 0;
             firstBallOnGroundIndex = 0;
             ballsLength = balls.length;
-        } else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
+        } 
+        
+        //when click restart
+        else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
             gameoff = false;
             balls = [];
             init();
