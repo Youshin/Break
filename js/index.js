@@ -22,6 +22,7 @@ $(function () {
     var checkifbrick = 0;
     var time = 60;
     var fps = 0;
+    var pause = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -50,6 +51,8 @@ $(function () {
         score = 0;
         time = 60;
         fps = 60;
+        pause = 0;
+
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
         window.requestAnimationFrame(draw);
@@ -57,17 +60,32 @@ $(function () {
     }
 
     function draw() {
-        
+
         clear();
         printBalls();
-        
+
         //ball(x, y, radius);
         $('#score').text("Score: " + score);
         //$('#time').text("Time: " + time.toFixed(2));
-        
+        rectgo(0, 780, 60, 20, "black");
+        text("Pause", "15px Comic Sans MS", 10, 795, "white");
+
         if (gameOn) {
-            //time -= 1/fps;
+//            $('#canvas').mouseup(function (e) {
+//                mx = e.pageX - this.offsetLeft; // mouse x position
+//                my = e.pageY - this.offsetTop;
+//                if (gameOn == false && gameoff == false) {
+//                    if (mx > 0 && mx < 60 && my > 770 && my < 800) {
+//                        gameoff = false;
+//                        balls = [];
+//                        init();
+//                        init_bricks();
+//                    }
+//                }
+//            });
             
+            //time -= 1/fps;
+
             for (m = 0; m < balls.length; m++) {
                 balls[m].x += balls[m].dx;
                 balls[m].y += balls[m].dy;
@@ -130,13 +148,10 @@ $(function () {
             }
             anim = window.requestAnimationFrame(draw);
         }
-        // else{
-        //
-        // }
-        
-        
+
+
         //game over condition
-        if (NROWS >= 19){// || time <= 0) {
+        if (NROWS >= 19) { // || time <= 0) {
             gameOn = true;
             gameoff = true;
             gameover();
@@ -306,26 +321,34 @@ $(function () {
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
         if (gameOn == false && gameoff == false) {
-            clear();
-            gameOn = true;
+            if (mx > 0 && mx < 60 && my > 770 && my < 800) {
+                gameoff = false;
+                balls = [];
+                init();
+                init_bricks();
+            } else {
+                clear();
+                gameOn = true;
 
-            balls[0].dy = (my - balls[0].y) / 40;
-            balls[0].dx = (mx - balls[0].x) / 40;
-            balls[0].bounced = 0;
-            draw();
-            for (i = 1; i < balls.length; ++i) {
-                // while(x++ < 100000000);
-                balls[i].dy = (my - balls[i].y) / 40;
-                balls[i].dx = (mx - balls[i].x) / 40;
-                balls[i].bounced = 0;
-                // draw();
+                balls[0].dy = (my - balls[0].y) / 40;
+                balls[0].dx = (mx - balls[0].x) / 40;
+                balls[0].bounced = 0;
+                draw();
+                for (i = 1; i < balls.length; ++i) {
+                    // while(x++ < 100000000);
+                    balls[i].dy = (my - balls[i].y) / 40;
+                    balls[i].dx = (mx - balls[i].x) / 40;
+                    balls[i].bounced = 0;
+                    // draw();
+                }
+                numBallsOnGround = 0;
+                ballHitGround = 0;
+                firstBallOnGroundIndex = 0;
+                ballsLength = balls.length;
             }
-            numBallsOnGround = 0;
-            ballHitGround = 0;
-            firstBallOnGroundIndex = 0;
-            ballsLength = balls.length;
-        } 
-        
+        }
+        //pause
+
         //when click restart
         else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
             gameoff = false;

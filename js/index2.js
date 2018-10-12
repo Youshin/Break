@@ -74,6 +74,8 @@ $(function () {
         //ball(x, y, radius);
         $('#score').text("Score: " + score);
         $('#time ').text("Time: " + time.toFixed(2));
+        rectgo(0, 780, 60, 20, "black");
+        text("Pause", "15px Comic Sans MS", 10, 795, "white");
 
         time -= 1 / fps;
         time2 -= 10 / fps;
@@ -142,12 +144,12 @@ $(function () {
         }
 
         //game over condition
-                if (time <= 0) {
-                    gameOn = true;
-                    gameoff = true;
-                    gameover();
-                    return;
-                }
+        if (time <= 0) {
+            gameOn = true;
+            gameoff = true;
+            gameover();
+            return;
+        }
 
         //draw bricks
         for (i = 0; i < NROWS; i++) {
@@ -293,28 +295,40 @@ $(function () {
     $('#canvas').mouseup(function (e) {
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
-        //if (gameOn == false && gameoff == false) {
-        //clear();
-        gameOn = true;
+        if (mx > 0 && mx < 60 && my > 770 && my < 800) {
+            while (1) {
+                if (mx > 0 && mx < 60 && my > 770 && my < 800) {
+                    gameOn = false;
+//                    balls = [];
+//                    init();
+//                    init_bricks();
+                    break;
+                }
+            }
+        } else {
+            //if (gameOn == false && gameoff == false) {
+            //clear();
+            gameOn = true;
 
-        balls[0].dy = (my - balls[0].y) / 40;
-        balls[0].dx = (mx - balls[0].x) / 40;
-        balls[0].bounced = 0;
-        draw();
-        for (i = 1; i < balls.length; ++i) {
-            // while(x++ < 100000000);
-            balls[i].dy = (my - balls[i].y) / 40;
-            balls[i].dx = (mx - balls[i].x) / 40;
-            balls[i].bounced = 0;
-            // draw();
+            balls[0].dy = (my - balls[0].y) / 40;
+            balls[0].dx = (mx - balls[0].x) / 40;
+            balls[0].bounced = 0;
+            draw();
+            for (i = 1; i < balls.length; ++i) {
+                // while(x++ < 100000000);
+                balls[i].dy = (my - balls[i].y) / 40;
+                balls[i].dx = (mx - balls[i].x) / 40;
+                balls[i].bounced = 0;
+                // draw();
+            }
+            numBallsOnGround = 0;
+            ballHitGround = 0;
+            firstBallOnGroundIndex = 0;
+            //ballsLength = balls.length;
+            //} 
+            s = 0;
+            time2 += 10;
         }
-        numBallsOnGround = 0;
-        ballHitGround = 0;
-        firstBallOnGroundIndex = 0;
-        //ballsLength = balls.length;
-        //} 
-        s = 0;
-        time2 += 10;
 
         //when click restart
         if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
