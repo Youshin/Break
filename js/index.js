@@ -322,10 +322,10 @@ $(function () {
         my = e.pageY - this.offsetTop;
         if (gameOn == false && gameoff == false) {
             if (mx > 0 && mx < 60 && my > 770 && my < 800) {
-                gameoff = false;
-                balls = [];
-                init();
-                init_bricks();
+                gameOn = false;
+//                balls = [];
+//                init();
+//                init_bricks();
             } else {
                 clear();
                 gameOn = true;
