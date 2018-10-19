@@ -11,76 +11,76 @@
 <body>
   <!-- nav bar -->
   <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                  aria-expanded="false">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="./main.html">Break!</a>
-          </div>
-  
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                  <li class="active">
-                      <a href="./main.html">Home</a>
-                  </li>
-                  <li>
-                      <a href="./index.html">play game</a>
-                  </li>
-                   <li>
-                      <a id="joinmenu" href="./signup.html">sign up</a>
-                  </li>
-                  <li>
-                      <a id="loginmenu" href="./login.html">log in</a>
-                  </li>
- 
-              </ul>
-          </div>
-          <!-- /.navbar-collapse -->
-      </div>
-      <!-- /.container-fluid -->
-  </nav>
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="./main.html">Break!</a>
+    </div>
+    
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a href="./main.html">Home</a>
+        </li>
+        <li>
+          <a href="./index.html">play game</a>
+        </li>
+        <li>
+          <a id="joinmenu" href="./signup.html">sign up</a>
+        </li>
+        <li>
+          <a id="loginmenu" href="./login.html">log in</a>
+        </li>
+        
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
 <br>
 <br>
 <br>
 <br>
 <br>
- 
-  <!-- nav bar end -->
- 
+
+<!-- nav bar end -->
+
 <!-- login form -->
 <div class="container">
-        <h1>please Log in</h1>
- 
-        <div class="form-group">
-          <label for="email">Email address:</label>
-          <input type="email" class="form-control" id="email">
-        </div>
-    
-        <div class="form-group">
-          <label for="pwd">Password:</label>
-          <input type="password" class="form-control" id="pwd">
-        </div>
-    
-        <button type="button" class="btn btn-default login">Login!</button>
- 
-    </div>
-    <!-- login form end -->
- 
- 
+  <h1>please Log in</h1>
+  
+  <div class="form-group">
+    <label for="email">Email address:</label>
+    <input type="email" class="form-control" id="email">
+  </div>
+  
+  <div class="form-group">
+    <label for="pwd">Password:</label>
+    <input type="password" class="form-control" id="pwd">
+  </div>
+  
+  <button type="button" class="btn btn-default login">Login!</button>
+  
+</div>
+<!-- login form end -->
+
+
 <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-  <script>
+<script>
     var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
     var firebaseDatabase; //파이어베이스 db 모듈 전역변수
     var userInfo; //가입한 유저의 정보. object 타입
     //파이어 베이스 초기화 코드
-     var config = {
+    var config = {
       apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
       authDomain: "break-a4931.firebaseapp.com",
       databaseURL: "https://break-a4931.firebaseio.com",
@@ -89,56 +89,56 @@
       messagingSenderId: "717477751137"
     };
     firebase.initializeApp(config);
- 
+    
     firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
     firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 객체
- 
     
- 
+    
+    
     //제이쿼리를 사용한다.
     $(document).ready(function(){
       
-      //가입버튼 눌렀을 때
-      $(document).on('click','.login',function(){
-        
-        //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
-        var email = $('#email').val();
-        var password = $('#pwd').val();
-        alert("pressed login button" + email +":"+ password);
+    //가입버튼 눌렀을 때
+    $(document).on('click','.login',function(){
+      
+    //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다.
+    var email = $('#email').val();
+    var password = $('#pwd').val();
+    alert("pressed login button" + email +":"+ password);
     
     //파이어베이스 이메일 로그인 함수
     firebaseEmailAuth.signInWithEmailAndPassword(email, password)
-   .then(function(firebaseUser) {
- 
-       //성공하면 firebaseUser에 유저 정보 값이 담겨 넘어온다.
-       loginSuccess(firebaseUser);
- 
-   })
-  .catch(function(error) {
-       // 실패했을 때 에러 처리
-       alert(error);
-       alert("Login failed");
+    .then(function(firebaseUser) {
+      
+    //성공하면 firebaseUser에 유저 정보 값이 담겨 넘어온다.
+    loginSuccess(firebaseUser);
+    
+  })
+    .catch(function(error) {
+    // 실패했을 때 에러 처리
+    alert(error);
+    alert("Login failed");
   });
     
-      });
-    });
+  });
+  });
     
     //로그인 성공했을 때
     function loginSuccess(firebaseUser){
-       alert("login success");
- 
+      alert("login success");
+      
     //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
-   firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
-        //alert(snapshot.val().name)
-    });
- 
+    firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
+    //alert(snapshot.val().name)
+  });
+    
     //메인 페이지로 이동
     window.location.href = "./main.html"
-    }
- 
-    
-    </script>
- 
-   
+  }
+  
+  
+</script>
+
+
 </body>
 </html>
