@@ -40,38 +40,13 @@ $(function () {
         x = WIDTH / 2;
         y = HEIGHT - 7;
         gameOn = false; // whether the ball is in motion
-        // x = WIDTH / 2;
-        // y = HEIGHT - 1;
         ctx.setLineDash([3, 10]);
-
-        //        for (num = 0; num < 1000; num++) {
-        //            var aBall = {};
-        //            aBall.dx = dx;
-        //            aBall.dy = dy;
-        //            aBall.x = x;
-        //            aBall.y = y;
-        //            aBall.bounced = 0;
-        //            balls.push(aBall);
-        //        }
-        //        var aBall = {};
-        //        aBall.dx = dx;
-        //        aBall.dy = dy;
-        //        aBall.x = x;
-        //        aBall.y = y;
-        //        aBall.bounced = 0;
-        //        balls.push(aBall);
         bricklevel = 1;
         score = 0;
         time = 60;
         time2 = 6000;
         fps = 60;
         s = 0;
-        //$('#canvas').addEventListener("click", onClick, false);
-        //animation
-
-        //window.requestAnimationFrame(draw);
-        //window.requestAnimationFrame(draw);
-        setInterval(draw, 1000 / 60);
     }
 
     function draw() {
@@ -94,10 +69,6 @@ $(function () {
                 time2 = 6000;
             }
             if (Math.round(time2) % 100 == 0) { // && s == 0) {
-//                for (j = 0; j < balls.length; ++j) { // brings all balls together after all the balls are on ground
-//                    balls[j].x = balls[firstBallOnGroundIndex].x;
-//                    balls[j].y = balls[firstBallOnGroundIndex].y;
-//                }
                 bricklevel++;
                 s++;
 
@@ -121,7 +92,6 @@ $(function () {
                 bricks.unshift(brickrow);
             }
 
-            //for (m = 0; m < balls.length; m++) {
             for (m = 0; m < balls.length; m++) {
                 balls[m].x += balls[m].dx;
                 balls[m].y += balls[m].dy;
@@ -149,8 +119,6 @@ $(function () {
                     balls[m].bounced = 0;
                 }
             }
-            //setInterval(draw, 1/60);
-            //anim = window.requestAnimationFrame(draw);
         }
 
         //game over condition
@@ -383,5 +351,7 @@ $(function () {
     init();
 
     init_bricks();
+    
+    setInterval(draw, 1000 / 60);
 
 });
