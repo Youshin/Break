@@ -323,9 +323,9 @@ $(function () {
         if (gameOn == false && gameoff == false) {
             if (mx > 0 && mx < 60 && my > 770 && my < 800) {
                 gameOn = false;
-//                balls = [];
-//                init();
-//                init_bricks();
+                balls = [];
+                init();
+                init_bricks();
             } else {
                 clear();
                 gameOn = true;
