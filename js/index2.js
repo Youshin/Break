@@ -26,6 +26,7 @@ $(function () {
     var nun = 0;
     var turns = 0;
     var s = 0;
+    var gamepaused = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -47,6 +48,7 @@ $(function () {
         time2 = 6000;
         fps = 60;
         s = 0;
+        gamepaused = 0;
     }
 
     function draw() {
@@ -57,9 +59,14 @@ $(function () {
         //ball(x, y, radius);
         $('#score').text("Score: " + score);
         $('#time ').text("Time: " + time.toFixed(2));
-        rectgo(0, 780, 60, 20, "black");
-        text("Pause", "15px Comic Sans MS", 10, 795, "white");
-
+        if (!gamepaused) {
+            rectgo(0, 780, 60, 20, "black");
+            text("Pause", "15px Comic Sans MS", 10, 795, "white");
+        }
+        if (gamepaused) {
+            rectgo(0, 780, 60, 20, "black");
+            text("Resume", "15px Comic Sans MS", 3, 795, "white");
+        }
 
 
         if (gameOn) {
@@ -68,12 +75,11 @@ $(function () {
             if (time2 < 0) {
                 time2 = 6000;
             }
-            if (Math.round(time2) % 100 == 0) { // && s == 0) {
+            if (Math.ceil(Math.round(time2) % 50) == 0) { // && s == 0) {
                 bricklevel++;
                 s++;
 
                 NROWS++;
-                //gameOn = false;
                 brickrow = [];
                 emptyPositions = []; // tracks all position in the row that don't have bricks
                 for (j = 0; j < NCOLS; j++) {
@@ -123,7 +129,7 @@ $(function () {
 
         //game over condition
         if (time <= 0) {
-            gameOn = true;
+            gameOn = false;
             gameoff = true;
             gameover();
             return;
@@ -157,18 +163,10 @@ $(function () {
     }
 
     function gameover() {
-        rectgo(0, 0, WIDTH, HEIGHT, "black");
-        text("Game Over", "75px Comic Sans MS", 65, 300, "white");
-        text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
-        rectgo(200, 600, 100, 50, "white");
-        text("Restart", "20px Comic Sans MS", 215, 630, "black");
-    }
-
-    function gamemode() {
-        rectgo(0, 0, WIDTH, HEIGHT, "black");
-        text("Game Over", "75px Comic Sans MS", 65, 300, "white");
-        text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
-        rectgo(200, 600, 100, 50, "white");
+        rectgo(0, 0, WIDTH, HEIGHT, "white");
+        text("Game Over", "75px Comic Sans MS", 65, 300, "black");
+        text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "black");
+        //rectgo(200, 600, 100, 50, "white");
         text("Restart", "20px Comic Sans MS", 215, 630, "black");
     }
 
@@ -248,8 +246,8 @@ $(function () {
     }
 
     $('#canvas').mousemove(function (e) {
-        if (e.which == 1 && !gameOn) {
-            clear();
+        if (e.which == 1 && !gameOn && !gameoff) {
+            //clear();
             //draw();
             ctx.beginPath();
             //ctx.moveTo(balls[0].x, balls[0].y);
@@ -273,52 +271,49 @@ $(function () {
     $('#canvas').mouseup(function (e) {
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
-        if (mx > 0 && mx < 60 && my > 770 && my < 800) {
-            while (1) {
-                if (mx > 0 && mx < 60 && my > 770 && my < 800) {
-                    gameOn = false;
-                    //                    balls = [];
-                    //                    init();
-                    //                    init_bricks();
-                    break;
-                }
+        if (!gameoff) {
+            
+            //pause
+            if (mx > 0 && mx < 60 && my > 770 && my < 800 && !gamepaused && gameOn == true) {
+                gameOn = false;
+                gamepaused = 1;
+            } else if (mx > 0 && mx < 60 && my > 770 && my < 800 && gamepaused == 1 && gameOn == false){
+                gameOn = true;
+                gamepaused = 0;
+            } else if (!gamepaused) {
+                gameOn = true;
+
+                //            balls[0].dy = (my - balls[0].y) / 40;
+                //            balls[0].dx = (mx - balls[0].x) / 40;
+                //            balls[0].bounced = 0;
+                //            draw();
+                //            for (i = 1; i < balls.length; ++i) {
+                //                // while(x++ < 100000000);
+                //                balls[i].dy = (my - balls[i].y) / 40;
+                //                balls[i].dx = (mx - balls[i].x) / 40;
+                //                balls[i].bounced = 0;
+                //                // draw();
+                //            }
+                //            numBallsOnGround = 0;
+                //            ballHitGround = 0;
+                //            firstBallOnGroundIndex = 0;
+                //            //ballsLength = balls.length;
+                //            //} 
+                //            s = 0;
+                //            //time2 += 10;
+
+                var aBall = {};
+                aBall.dx = dx;
+                aBall.dy = dy;
+                aBall.x = x;
+                aBall.y = y;
+                aBall.bounced = 0;
+                balls.push(aBall);
+                balls[balls.length - 1].dy = (my - (HEIGHT - 7)) / 40;
+                balls[balls.length - 1].dx = (mx - (WIDTH / 2)) / 40;
+                balls[balls.length - 1].bounced = 0;
+                ballsLength = balls.length;
             }
-        } else {
-            //if (gameOn == false && gameoff == false) {
-            //clear();
-            gameOn = true;
-
-            //            balls[0].dy = (my - balls[0].y) / 40;
-            //            balls[0].dx = (mx - balls[0].x) / 40;
-            //            balls[0].bounced = 0;
-            //            draw();
-            //            for (i = 1; i < balls.length; ++i) {
-            //                // while(x++ < 100000000);
-            //                balls[i].dy = (my - balls[i].y) / 40;
-            //                balls[i].dx = (mx - balls[i].x) / 40;
-            //                balls[i].bounced = 0;
-            //                // draw();
-            //            }
-            //            numBallsOnGround = 0;
-            //            ballHitGround = 0;
-            //            firstBallOnGroundIndex = 0;
-            //            //ballsLength = balls.length;
-            //            //} 
-            //            s = 0;
-            //            //time2 += 10;
-
-            var aBall = {};
-            aBall.dx = dx;
-            aBall.dy = dy;
-            aBall.x = x;
-            aBall.y = y;
-            aBall.bounced = 0;
-            balls.push(aBall);
-            balls[balls.length - 1].dy = (my - (HEIGHT - 7)) / 40;
-            balls[balls.length - 1].dx = (mx - (WIDTH / 2)) / 40;
-            balls[balls.length - 1].bounced = 0;
-            ballsLength = balls.length;
-
         }
 
         //when click restart
@@ -346,12 +341,10 @@ $(function () {
         }
     }
 
-
-
     init();
 
     init_bricks();
-    
+
     setInterval(draw, 1000 / 60);
 
 });
