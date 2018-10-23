@@ -22,7 +22,7 @@ $(function () {
     var checkifbrick = 0;
     var time = 60;
     var fps = 0;
-    var pause = 0;
+    var gamepaused = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -51,12 +51,12 @@ $(function () {
         score = 0;
         time = 60;
         fps = 60;
-        pause = 0;
+        gamepaused = 0;
 
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
-        window.requestAnimationFrame(draw);
-        window.requestAnimationFrame(draw);
+        // window.requestAnimationFrame(draw);
+        //window.requestAnimationFrame(draw);
     }
 
     function draw() {
@@ -66,26 +66,16 @@ $(function () {
 
         //ball(x, y, radius);
         $('#score').text("Score: " + score);
-        //$('#time').text("Time: " + time.toFixed(2));
-        rectgo(0, 780, 60, 20, "black");
-        text("Pause", "15px Comic Sans MS", 10, 795, "white");
+        if (!gamepaused) {
+            rectgo(0, 780, 60, 20, "black");
+            text("Pause", "15px Comic Sans MS", 10, 795, "white");
+        }
+        if (gamepaused) {
+            rectgo(0, 780, 60, 20, "black");
+            text("Resume", "15px Comic Sans MS", 3, 795, "white");
+        }
 
         if (gameOn) {
-//            $('#canvas').mouseup(function (e) {
-//                mx = e.pageX - this.offsetLeft; // mouse x position
-//                my = e.pageY - this.offsetTop;
-//                if (gameOn == false && gameoff == false) {
-//                    if (mx > 0 && mx < 60 && my > 770 && my < 800) {
-//                        gameoff = false;
-//                        balls = [];
-//                        init();
-//                        init_bricks();
-//                    }
-//                }
-//            });
-            
-            //time -= 1/fps;
-
             for (m = 0; m < balls.length; m++) {
                 balls[m].x += balls[m].dx;
                 balls[m].y += balls[m].dy;
@@ -146,12 +136,12 @@ $(function () {
                     }
                 }
             }
-            anim = window.requestAnimationFrame(draw);
+            //anim = window.requestAnimationFrame(draw);
         }
 
 
         //game over condition
-        if (NROWS >= 19) { // || time <= 0) {
+        if (NROWS >= 15) { // || time <= 0) {
             gameOn = true;
             gameoff = true;
             gameover();
@@ -203,10 +193,10 @@ $(function () {
     }
 
     function gameover() {
-        rectgo(0, 0, WIDTH, HEIGHT, "black");
-        text("Game Over", "75px Comic Sans MS", 65, 300, "white");
-        text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "white");
-        rectgo(200, 600, 100, 50, "white");
+        //rectgo(0, 0, WIDTH, HEIGHT, "black");
+        text("Game Over", "75px Comic Sans MS", 65, 300, "black");
+        text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "black");
+        //rectgo(200, 600, 100, 50, "white");
         text("Restart", "20px Comic Sans MS", 215, 630, "black");
     }
 
@@ -320,14 +310,16 @@ $(function () {
     $('#canvas').mouseup(function (e) {
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
-        if (gameOn == false && gameoff == false) {
-            if (mx > 0 && mx < 60 && my > 770 && my < 800) {
+        if (!gameoff) {
+            //pause
+            if (mx > 0 && mx < 60 && my > 770 && my < 800 && !gamepaused && gameOn == true) {
                 gameOn = false;
-                balls = [];
-                init();
-                init_bricks();
-            } else {
-                clear();
+                gamepaused = 1;
+            } else if (mx > 0 && mx < 60 && my > 770 && my < 800 && gamepaused == 1 && gameOn == false) {
+                gameOn = true;
+                gamepaused = 0;
+            } else if (!gameOn && !gamepaused) {
+                //clear();
                 gameOn = true;
 
                 balls[0].dy = (my - balls[0].y) / 40;
@@ -347,7 +339,6 @@ $(function () {
                 ballsLength = balls.length;
             }
         }
-        //pause
 
         //when click restart
         else if (gameoff == true && mx > 200 && mx < 300 && my > 600 && my < 650) {
@@ -380,4 +371,5 @@ $(function () {
 
     init_bricks();
 
+    setInterval(draw, 1000 / 60);
 });
