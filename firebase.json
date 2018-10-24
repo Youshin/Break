@@ -4,15 +4,16 @@
   },
   "hosting": {
     "public": "/",
-    "redirects": [ {
-      "source" : "/",
-      "destination" : "/main.html",
-      "type" : 301
-    }],
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   },
   "storage": {
