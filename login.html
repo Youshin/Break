@@ -7,8 +7,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+
+
 </head>
 <body>
+   
   <!-- nav bar -->
   <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
@@ -72,8 +77,10 @@
   </div>
   
   <button type="button" class="btn btn-default login">Login!</button>
-  
-</div>
+<!-- The surrounding HTML is left untouched by FirebaseUI.
+     Your app may use that space for branding, controls and other customizations.-->
+     <div id="firebaseui-auth-container"></div>
+     <div id="loader">Loading...</div></div>
 <!-- login form end -->
 
 
@@ -96,7 +103,37 @@
     firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
     firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 객체
     
-    
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var uiConfig = {
+      callbacks: {
+        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+          // User successfully signed in.
+          // Return type determines whether we continue the redirect automatically
+          // or whether we leave that to developer to handle.
+          return true;
+        },
+        uiShown: function() {
+          // The widget is rendered.
+          // Hide the loader.
+          document.getElementById('loader').style.display = 'none';
+        }
+      },
+      // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+      signInFlow: 'popup',
+      signInSuccessUrl: './index.html',
+      signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      ],
+      // Terms of service url.
+      tosUrl: './index.html',
+      // Privacy policy url.
+      privacyPolicyUrl: '<your-privacy-policy-url>'
+    };
+
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+
     
     //제이쿼리를 사용한다.
     $(document).ready(function(){
@@ -124,7 +161,10 @@
   });
     
   });
-  });
+  
+ 
+
+});
     
     //로그인 성공했을 때
     function loginSuccess(firebaseUser){
