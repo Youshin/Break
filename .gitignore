@@ -5,8 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 firebase-debug.log*
-.brackets.json	
 
+	
+.brackets.json
 .DS_Store
 
 # Firebase cache
@@ -66,3 +67,6 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+/docs
+
