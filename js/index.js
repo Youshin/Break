@@ -147,13 +147,9 @@ $(function () {
         if (NROWS >= 15) { // || time <= 0) {
             if (!gameoff) {
                 playGameOver();
-                updateHighScore(auth.currentUser.uid, score);
-                // if (userId != null) {
-                //     console.log('user id not null');
-                //     updateHighScore(userId, score);
-                // } else {
-                //     console.log('user id null');
-                // }
+                if (auth.currentUser != null) {
+                    updateHighScore(auth.currentUser.uid, score);
+                }
             }
             gameOn = true;
             gameoff = true;

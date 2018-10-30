@@ -25,6 +25,7 @@
    
     <script src="./js/leaderboard.js"></script>
     <script src="./js/volume.js"></script>
+    <script src="./js/bug.js"></script>
 
 </head>
 <body>
@@ -63,11 +64,14 @@
                         <a href="./time.html">Time mode</a>
                     </li>
                     <li>
-                            <a href="#" onclick="toggleVolumeOptions()">Sound Options</a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="toggleLeaderboard()">Leaderboard</a>
-                        </li>
+                        <a href="#" onclick="toggleVolumeOptions()">Sound Options</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="toggleLeaderboard()">Leaderboard</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="toggleBugSubmit()">Submit a bug</a>
+                    </li>
                     <li>
                         <a id="joinmenu" href="./signup.html">sign up</a>
                     </li>
@@ -130,6 +134,17 @@
                 <tfoot id="leaderboard-foot"></tfoot>
                 <!-- <tfoot id="leaderboard-foot"><tr><td>105</td><td>You</td><td>16</td><td>2018-8-5</td></tr></tfoot> -->
             </table>
+        </div>
+
+        <div id="submit-bug-wrapper" class="container hidden">
+                <h1>Report a bug</h1>
+                
+                <div class="form-group">
+                  <label for="email">Enter bug details and the information will be sent to us to fix.</label>
+                  <textarea id='submit-bug-text' class="form-control"></textarea>
+                </div>
+
+                <button id="submit-bug-button" type="button" class="btn btn-default" onclick="submitBug()">Submit</button>
         </div>
 
 </body>
