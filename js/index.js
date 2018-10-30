@@ -28,6 +28,7 @@ $(function () {
         BRICKWIDTH = 0;
     var NROWS = 0,
         NCOLS = 0;
+        var firstClick = false;
 
     function init() {
         //canvas 가져오기
@@ -52,7 +53,6 @@ $(function () {
         time = 60;
         fps = 60;
         gamepaused = 0;
-
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
         // window.requestAnimationFrame(draw);
@@ -82,10 +82,12 @@ $(function () {
                 if (balls[m].x > WIDTH - radius || balls[m].x < 0 + radius) {
                     balls[m].dx = -balls[m].dx;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
                 if (balls[m].y < 0 + radius) {
                     balls[m].dy = -balls[m].dy;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
 
 
@@ -113,6 +115,7 @@ $(function () {
                             balls[j].x = balls[firstBallOnGroundIndex].x;
                             balls[j].y = balls[firstBallOnGroundIndex].y;
                         }
+                        playWoosh();
                         bricklevel++;
                         gameOn = false;
                         NROWS++;
@@ -142,6 +145,16 @@ $(function () {
 
         //game over condition
         if (NROWS >= 15) { // || time <= 0) {
+            if (!gameoff) {
+                playGameOver();
+                updateHighScore(auth.currentUser.uid, score);
+                // if (userId != null) {
+                //     console.log('user id not null');
+                //     updateHighScore(userId, score);
+                // } else {
+                //     console.log('user id null');
+                // }
+            }
             gameOn = true;
             gameoff = true;
             gameover();
@@ -172,8 +185,12 @@ $(function () {
                     if (bricks[row][col].number == 0) {
                         bricks[row][col].appear = 0;
                         score++;
+                        playPop2();
+                    } else {
+                        playPop1();
                     }
                 } else if (bricks[row][col].appear == 2) {
+                    playDing();
                     ballCount++;
                     aNewBall = {};
                     aNewBall.dx = 0;
@@ -366,10 +383,17 @@ $(function () {
     }
 
 
-
     init();
 
     init_bricks();
 
     setInterval(draw, 1000 / 60);
+
+    let clicked = false;
+    document.body.onmousedown = function() {
+        if (!clicked) {
+            playMusic();
+            clicked = true;
+        }
+    }
 });
