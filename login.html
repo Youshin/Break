@@ -181,7 +181,6 @@
     //로그인 성공했을 때
     function loginSuccess(firebaseUser){
       alert("login success");
-      
     //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
     firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
     //alert(snapshot.val().name)
