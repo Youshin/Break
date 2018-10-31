@@ -45,7 +45,7 @@ $(function () {
         bricklevel = 1;
         score = 0;
         time = 60;
-        time2 = 6000;
+        time2 = 600;
         fps = 60;
         s = 0;
         gamepaused = 0;

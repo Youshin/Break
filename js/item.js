@@ -23,6 +23,8 @@ $(function () {
     var time = 60;
     var fps = 0;
     var gamepaused = 0;
+    var item = 1;
+    var lev = 0;
 
     var BRICKHEIGHT = 0,
         BRICKWIDTH = 0;
@@ -52,6 +54,8 @@ $(function () {
         time = 60;
         fps = 60;
         gamepaused = 0;
+        item = 1;
+        lev = 0;
 
         //$('#canvas').addEventListener("click", onClick, false);
         //animation
@@ -113,7 +117,7 @@ $(function () {
                             balls[j].x = balls[firstBallOnGroundIndex].x;
                             balls[j].y = balls[firstBallOnGroundIndex].y;
                         }
-                        bricklevel++;
+                        //bricklevel++;
                         gameOn = false;
                         NROWS++;
                         brickrow = [];
@@ -128,11 +132,20 @@ $(function () {
                             brick.number = bricklevel;
                             brickrow[j] = brick; //Math.round(Math.random() + 0.2);
                         }
-                        randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
-                        newBallPos = emptyPositions[randomEmptyPos];
-                        brickrow[newBallPos].appear = 2;
+                        if (item % 5 == 0) {
+                            randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
+                            newBallPos = emptyPositions[randomEmptyPos];
+                            brickrow[newBallPos].appear = 2;
+                            bricklevel++;
+                            item = 1;
+                        }                    
+                        if (item % 2 == 0) {
+                            randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
+                            newBallPos = emptyPositions[randomEmptyPos];
+                            brickrow[newBallPos].appear = 3;
+                        }
                         bricks.unshift(brickrow);
-
+                        item++;
                     }
                 }
             }
@@ -141,7 +154,7 @@ $(function () {
 
 
         //game over condition
-        if (NROWS >= 15) { // || time <= 0) {
+        if (NROWS >= 100) { // || time <= 0) {
             gameOn = true;
             gameoff = true;
             gameover();
@@ -154,9 +167,13 @@ $(function () {
                 if (bricks[i][j].appear == 2) {
                     newBall(j * BRICKWIDTH + BRICKWIDTH / 2, i * BRICKHEIGHT + BRICKHEIGHT / 2, radius + 3);
                 }
+                if (bricks[i][j].appear == 3) {
+                    newItem(j * BRICKWIDTH + BRICKWIDTH / 2, i * BRICKHEIGHT + BRICKHEIGHT / 2, radius + 3);
+                }
                 if (bricks[i][j].appear == 1) {
                     rect(j * BRICKWIDTH, i * BRICKHEIGHT, BRICKWIDTH, BRICKHEIGHT, i, j);
                 }
+
             }
         }
 
@@ -183,13 +200,65 @@ $(function () {
                     aNewBall.bounced = 0;
                     balls.push(aNewBall);
                     bricks[row][col].appear = 0;
+                } else if (bricks[row][col].appear == 3) {
+                    bomb(row, col);
                 }
             }
         }
+    }
 
-        // if(y == HEIGHT - 5){
-        //     gameOn = false;
-        // }
+    function bomb(row, col) {
+        bricks[row][col].appear = 0;
+        lev = Math.ceil(bricklevel/2);
+
+        if ((row + 1) < NROWS && (col + 1) < NCOLS &&
+            bricks[row + 1][col + 1].appear == 1 &&
+            (bricks[row + 1][col + 1].number=bricks[row + 1][col + 1].number-lev) <= 0) {
+            bricks[row + 1][col + 1].appear = 0;
+            score++;
+        }
+        if ((row - 1) >= 0 && (col + 1) < NCOLS &&
+            bricks[row - 1][col + 1].appear == 1 &&
+            (bricks[row - 1][col + 1].number=bricks[row - 1][col + 1].number-lev) <= 0) {
+            bricks[row - 1][col + 1].appear = 0;
+            score++;
+        }
+        if ((row + 1) < NROWS && (col) < NCOLS &&
+            bricks[row + 1][col].appear == 1 &&
+            (bricks[row + 1][col].number=bricks[row + 1][col].number-lev) <= 0) {
+            bricks[row + 1][col].appear = 0;
+            score++;
+        }
+        if ((row - 1) >= 0 && (col) < NCOLS &&
+            bricks[row - 1][col].appear == 1 &&
+            (bricks[row - 1][col].number = bricks[row - 1][col].number-lev) <= 0) {
+            bricks[row - 1][col].appear = 0;
+            score++;
+        }
+        if ((row + 1) < NROWS && (col - 1) >= 0 &&
+            bricks[row + 1][col - 1].appear == 1 &&
+            (bricks[row + 1][col - 1].number=bricks[row + 1][col - 1].number-lev) <= 0) {
+            bricks[row + 1][col - 1].appear = 0;
+            score++;
+        }
+        if ((row - 1) >= 0 && (col - 1) >= 0 &&
+            bricks[row - 1][col - 1].appear == 1 &&
+            (bricks[row - 1][col - 1].number=bricks[row - 1][col - 1].number-lev) <= 0) {
+            bricks[row - 1][col - 1].appear = 0;
+            score++;
+        }
+        if ((row) < NROWS && (col + 1) < NCOLS &&
+            bricks[row][col + 1].appear == 1 &&
+            (bricks[row][col + 1].number=bricks[row][col + 1].number-lev) <= 0) {
+            bricks[row][col + 1].appear = 0;
+            score++;
+        }
+        if ((row) < NROWS && (col - 1) >= 0 &&
+            bricks[row][col - 1].appear == 1 &&
+            (bricks[row][col - 1].number=bricks[row][col - 1].number-lev) <= 0) {
+            bricks[row][col - 1].appear = 0;
+            score++;
+        }
     }
 
     function gameover() {
@@ -235,7 +304,16 @@ $(function () {
     }
 
     function newBall(x, y, r) {
-        ctx.fillStyle = getRndColor();
+        //ctx.fillStyle = getRndColor();
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    function newItem(x, y, r) {
+        ctx.fillStyle = "red";
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2, true);
         ctx.closePath();
@@ -267,12 +345,12 @@ $(function () {
                 if (brick.appear == 0) {
                     emptyPositions.push(j);
                 }
-                brick.number = Math.round(Math.random() * (+3 - +1) + +1);
+                brick.number = Math.round(Math.random() * (+1 - +1) + +1);
                 bricks[i][j] = brick; //Math.round(Math.random() + 0.2);
             }
             randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length));
             newBallPos = emptyPositions[randomEmptyPos];
-            bricks[i][newBallPos].appear = 2;
+            bricks[i][newBallPos].appear = 3;
         }
     }
     // $('#canvas').mousedown(function(e){
