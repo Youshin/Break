@@ -9,19 +9,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
    
-        <!-- temp alex -->
-        <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
-        <script>
-            var config = {
-                apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
-                authDomain: "break-a4931.firebaseapp.com",
-                databaseURL: "https://break-a4931.firebaseio.com",
-                projectId: "break-a4931",
-                storageBucket: "break-a4931.appspot.com",
-                messagingSenderId: "717477751137"
-            };
-            </script>
-        <!-- end temp alex -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
+            authDomain: "break-a4931.firebaseapp.com",
+            databaseURL: "https://break-a4931.firebaseio.com",
+            projectId: "break-a4931",
+            storageBucket: "break-a4931.appspot.com",
+            messagingSenderId: "717477751137"
+        };
+        </script>
    
     <script src="./js/leaderboard.js"></script>
     <script src="./js/volume.js"></script>
@@ -64,10 +62,9 @@
                         <a href="./time.html">Time mode</a>
                     </li>
                     <li>
-<<<<<<< HEAD
                       <a href="./item.html">Item mode</a>
-                  </li>
-=======
+                    </li>
+                    <li>
                         <a href="#" onclick="toggleVolumeOptions()">Sound Options</a>
                     </li>
                     <li>
@@ -76,7 +73,6 @@
                     <li>
                         <a href="#" onclick="toggleBugSubmit()">Submit a bug</a>
                     </li>
->>>>>>> dcd9646f9044eb42b137f758136f8ee0809b46cf
                     <li>
                         <a id="joinmenu" href="./signup.html">sign up</a>
                     </li>
@@ -123,8 +119,11 @@
         <button id="week" onclick="setFilter(1)">Last week</button>
         <button id="month" onclick="setFilter(2)">Last month</button>
         <button id="year" onclick="setFilter(3)">Last year</button>
+        <button id="clear" onclick="clearFilter()">Clear Filter</button>
         <button id="classic" onclick="chooseGameMode(0)">Classic</button>
         <button id="timed" onclick="chooseGameMode(1)">Timed</button>
+        <button id="item" onclick="chooseGameMode(2)">Item</button>
+        <button id="refresh" onclick="refreshLB()">Refresh</button>
             <table id="leaderboard-table" class="fixed">
                 <thead id="leaderboard-head">
                     <tr>

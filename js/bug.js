@@ -1,7 +1,6 @@
 let bugsRef = databaseRef.ref('bugs');
 
 function toggleBugSubmit() {
-    // toggle hidden class on bug wrapper.
     document.getElementById('submit-bug-wrapper').classList.toggle('hidden');
 }
 

@@ -9,9 +9,33 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
 
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyBDamDhJR5eLnAeDsjVUxL5GpSOa4nNYkU",
+            authDomain: "break-a4931.firebaseapp.com",
+            databaseURL: "https://break-a4931.firebaseio.com",
+            projectId: "break-a4931",
+            storageBucket: "break-a4931.appspot.com",
+            messagingSenderId: "717477751137"
+        };
+        </script>
+   
+    <script src="./js/leaderboard.js"></script>
+    <script src="./js/volume.js"></script>
+    <script src="./js/bug.js"></script>
+
 </head>
 
 <body>
+    <audio id='pop1'><source src="328117__greenvwbeetle__pop-8.flac" type="audio/flac"></audio>
+    <audio id='pop2'><source src="411642__inspectorj__pop-high-a-h1.wav" type="audio/wav"></audio>
+    <audio id='up1'><source src="420504__jfrecords__uprising3.wav" type="audio/wav"></audio>
+    <audio id='up2'><source src="420506__jfrecords__uprising1.wav" type="audio/wav"></audio>
+    <audio id='gameover'><source src="439890__simonbay__lushlife-gameover.wav" type="audio/wav"></audio>
+    <audio id='music'><source src="bensound-deepblue.mp3" type="audio/mpeg"></audio>
+    <audio id='woosh'><source src="194081__potentjello__woosh-noise-1.wav" type="audio/wav"></audio>
+    <audio id='ding'><source src="426594__mootmcnoodles__ding.wav" type="audio/wav"></audio>
     <!-- nav bar start -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -42,6 +66,15 @@
                         <a href="./item.html">Item mode</a>
                     </li>
                     <li>
+                        <a href="#" onclick="toggleVolumeOptions()">Sound Options</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="toggleLeaderboard()">Leaderboard</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="toggleBugSubmit()">Submit a bug</a>
+                    </li>
+                    <li>
                         <a id="joinmenu" href="./signup.html">sign up</a>
                     </li>
                     <li>
@@ -63,7 +96,59 @@
     <h1>Break!</h1>
     <h2 id="score"></h2>
     <canvas id="canvas" width="500px" height="800px"></canvas>
+    <div id='volume-wrapper' class='hidden'>
+        <span><b>Volume Options</b></span>
+        <br>
+        <br>
+        <div>
+            <span>Master Volume</span>
+            <input type='range' min='0' max='1' step='.01' onchange='updateMasterVolume(this.value)' oninput="updateMasterVolume(this.value)">
+        </div>
+        <div>
+            <span>Effects Volume</span>
+            <input type='range' min='0' max='1' step='.01' onchange='updateEffectsVolume(this.value)' oninput="updateEffectsVolume(this.value)">
+        </div>
+        <div>
+            <span>Music Volume</span>
+            <input type='range' min='0' max='1' step='.01' onchange='updateMusicVolume(this.value)' oninput="updateMusicVolume(this.value)">
+        </div>
+    </div>
 
+    <div id="leaderboard-wrapper" class="hidden">
+        <button id="day" onclick="setFilter(0)">Last day</button>
+        <button id="week" onclick="setFilter(1)">Last week</button>
+        <button id="month" onclick="setFilter(2)">Last month</button>
+        <button id="year" onclick="setFilter(3)">Last year</button>
+        <button id="clear" onclick="clearFilter()">Clear Filter</button>
+        <button id="classic" onclick="chooseGameMode(0)">Classic</button>
+        <button id="timed" onclick="chooseGameMode(1)">Timed</button>
+        <button id="item" onclick="chooseGameMode(2)">Item</button>
+        <button id="refresh" onclick="refreshLB()">Refresh</button>
+        <table id="leaderboard-table" class="fixed">
+            <thead id="leaderboard-head">
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+            <tfoot id="leaderboard-foot"></tfoot>
+            <!-- <tfoot id="leaderboard-foot"><tr><td>105</td><td>You</td><td>16</td><td>2018-8-5</td></tr></tfoot> -->
+        </table>
+    </div>
+
+    <div id="submit-bug-wrapper" class="container hidden">
+            <h1>Report a bug</h1>
+            
+            <div class="form-group">
+                <label for="email">Enter bug details and the information will be sent to us to fix.</label>
+                <textarea id='submit-bug-text' class="form-control"></textarea>
+            </div>
+
+            <button id="submit-bug-button" type="button" class="btn btn-default" onclick="submitBug()">Submit</button>
+    </div>
 
 </body>
 <script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
