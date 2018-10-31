@@ -76,6 +76,7 @@ $(function () {
                 time2 = 6000;
             }
             if (Math.ceil(Math.round(time2) % 50) == 0) { // && s == 0) {
+                playWoosh();
                 bricklevel++;
                 s++;
 
@@ -104,10 +105,12 @@ $(function () {
                 if (balls[m].x > WIDTH - radius || balls[m].x < 0 + radius) {
                     balls[m].dx = -balls[m].dx;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
                 if (balls[m].y < 0 + radius) {
                     balls[m].dy = -balls[m].dy;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
 
 
@@ -129,6 +132,12 @@ $(function () {
 
         //game over condition
         if (time <= 0) {
+            if (!gameoff) {
+                playGameOver();
+                if (auth.currentUser != null) {
+                    updateHighScore(auth.currentUser.uid, score, 1);
+                }
+            }
             gameOn = false;
             gameoff = true;
             gameover();
@@ -156,6 +165,9 @@ $(function () {
                     if (bricks[row][col].number == 0) {
                         bricks[row][col].appear = 0;
                         score++;
+                        playPop2();
+                    } else {
+                        playPop1();
                     }
                 }
             }
@@ -347,4 +359,11 @@ $(function () {
 
     setInterval(draw, 1000 / 60);
 
+    let clicked = false;
+    document.body.onmousedown = function() {
+        if (!clicked) {
+            playMusic();
+            clicked = true;
+        }
+    }
 });

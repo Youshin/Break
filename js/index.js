@@ -148,7 +148,7 @@ $(function () {
             if (!gameoff) {
                 playGameOver();
                 if (auth.currentUser != null) {
-                    updateHighScore(auth.currentUser.uid, score);
+                    updateHighScore(auth.currentUser.uid, score, 0);
                 }
             }
             gameOn = true;

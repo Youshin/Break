@@ -2,16 +2,16 @@ var fire = firebase.initializeApp(config);
 let databaseRef = fire.database();
 let auth = fire.auth();
 
-let leaderboardName = 'test';
-let leaderboardRef = databaseRef.ref(leaderboardName);
+let leaderboardRefs = [databaseRef.ref('classic_leaderboard'), databaseRef.ref('timed_leaderboard'), databaseRef.ref('item_leaderboard')];
+
 let usersRef = databaseRef.ref('users');
 let leaderboardShowing = false;
 // let currentUserId = auth.currentUser.uid;
 
 let gameModes = [
-    'test',
-    // 'survival',
-    'timed'
+    'classic',
+    'timed',
+    'item'
 ]
 
 let filterChoices = [
@@ -30,15 +30,31 @@ let leaderboardData = [];
 let currentFilter = -1;
 let numRows = 100;
 
-function updateHighScore(userId, score) {
-    console.log('update high score');
-    console.log('user id = ' + userId);
-
+function updateHighScore(userId, score, gameModeId) {
     usersRef.child(userId).once('value', (snapshot) => {
-        let highScore = snapshot.val().highScore;
+
+        let highScore = 0;
+
+        if (gameModeId == 0) {
+            highScore = snapshot.val().classic_highscore;
+        } else if (gameModeId == 1) {
+            highScore = snapshot.val().timed_highscore;
+        } else {
+            highScore = snapshot.val().item_highscore;
+        }
+
+        // let highScore = snapshot.val().highScore;
         if (highScore == null || score > highScore) {
             // Update user high score.
-            usersRef.child(userId).update({highScore: score});
+            if (gameModeId == 0) {
+                usersRef.child(userId).update({classic_highscore: score});
+            } else if (gameModeId == 1) {
+                usersRef.child(userId).update({timed_highscore: score});
+            } else {
+                usersRef.child(userId).update({item_highscore: score});
+            }
+
+            // usersRef.child(userId).update({highScore: score});
 
             let scoreObject = {
                 'score': score,
@@ -48,7 +64,8 @@ function updateHighScore(userId, score) {
             }
 
             // Update leaderboard score.
-            leaderboardRef.child(userId).update(scoreObject);
+            leaderboardRefs[gameModeId].child(userId).update(scoreObject);
+            // leaderboardRef.child(userId).update(scoreObject);
         }
     });
 }
@@ -58,49 +75,37 @@ function toggleLeaderboard() {
     document.getElementById('volume-wrapper').classList.add('hidden');
 
     if (!leaderboardShowing) {
-        // setupFilters();
-        trackLeaderboards();
-        updateTimers();
         chooseGameMode(0);
+        // addRandomScores(110, 0);
+        // addRandomScores(110, 1);
+        // addRandomScores(110, 2);
     }
 
     leaderboardShowing = !leaderboardShowing;
 }
 
-// function setupFilters() {
-//     for (let i = 0; i < filterChoices.length; i++) {
-//         let button = document.createElement('button');
-//         button.innerHTML = filterChoices[i][0];
-//         button.onclick = function() {
-//             setFilter(i);
-//         }
-//         document.body.appendChild(button);
-//     }
-// }
-
 function clearFilter() {
     currentFilter = -1;
+    let tableFoot = document.getElementById('leaderboard-foot');
+    while (tableFoot.firstChild) {
+        tableFoot.removeChild(tableFoot.firstChild);
+    }
+    getLeaderboardData(gameModes[currentGameMode]);
+    setTimeout(function() {
+        showLeaderboard(currentGameMode);
+    }, 1000);
 }
 
 function setFilter(filterId) {
-    currentFilter = filterChoices[filterId][1];
-}
-
-function trackLeaderboards() {
-    for (let i = 0; i < gameModes.length; i++) {
-        getLeaderboardData(gameModes[i]);
-        times.push(2);
-        // started.push(true);
-        refreshable.push(false);
-
-        // let button = document.createElement('button');
-        // button.innerText = gameModes[i];
-        // button.onclick = function() {
-        //     chooseGameMode(i);
-        // }
-        // document.body.appendChild(button);
-        // buttons.push(button);
+    let tableFoot = document.getElementById('leaderboard-foot');
+    while (tableFoot.firstChild) {
+        tableFoot.removeChild(tableFoot.firstChild);
     }
+    currentFilter = filterChoices[filterId][1];
+    getLeaderboardData(gameModes[currentGameMode]);
+    setTimeout(function() {
+        showLeaderboard(currentGameMode);
+    }, 1000);
 }
 
 function disableGameMode(gameModeId) {
@@ -111,21 +116,8 @@ function enableGameMode(gameModeId) {
     buttons[gameModeId].disabled = false;
 }
 
-function updateTimers() {
-    for (let i = 0; i < gameModes.length; i++) {
-        times[i] = times[i] - 1;
-        if (times[i] === 0) {
-            times[i] = 60;
-            refreshable[i] = true;
-            if (currentGameMode === i) {
-                showLeaderboard(i);
-                refreshable[i] = true;
-            }
-        }
-    }
-    setTimeout(function () {
-        updateTimers();
-    }, 1000);
+function refreshLB() {
+    chooseGameMode(currentGameMode);
 }
 
 function getLeaderboardData(gameMode) {
@@ -133,8 +125,8 @@ function getLeaderboardData(gameMode) {
     let thisRank = 0;
     let prevScore = -1;
     let numScores = 0;
-    let lbRef = databaseRef.ref(gameMode);
-    lbRef.orderByChild('negativeScore').once('value', (snapshot) => {
+
+    leaderboardRefs[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
             numScores++;
             let thisScore = childSnapshot.val().score;
@@ -172,18 +164,15 @@ function getLeaderboardData(gameMode) {
 }
 
 function chooseGameMode(gameModeId) {
-    if (currentGameMode == gameModeId) {
-        return;
-    }
-
     currentGameMode = gameModeId;
-
-    if (refreshable[gameModeId]) {
-        getLeaderboardData(gameModes[gameModeId]);
-        refreshable[gameModeId] = false;
+    let tableFoot = document.getElementById('leaderboard-foot');
+    while (tableFoot.firstChild) {
+        tableFoot.removeChild(tableFoot.firstChild);
     }
-
-    showLeaderboard(gameModeId);
+    getLeaderboardData(gameModes[gameModeId]);
+    setTimeout(function() {
+        showLeaderboard(gameModeId);
+    }, 1000);
 }
 
 function showLeaderboard(gameModeId) {
@@ -270,41 +259,42 @@ function renderLeaderboard(tableBody, leaderboard) {
 }
 
 // Fetches the current leaderboard from firebase and returns it as an array of score objects.
-function updateLeaderboard(userId, innerWrapper, numRows) {
-    let leaderboard = [];
-    let thisRank = 0;
-    let prevScore = -1;
-    let numScores = 0;
+// function updateLeaderboard(userId, innerWrapper, numRows) {
+//     let leaderboard = [];
+//     let thisRank = 0;
+//     let prevScore = -1;
+//     let numScores = 0;
 
-    leaderboardRef.orderByChild('negativeScore').once('value', (snapshot) => {
-        snapshot.forEach(function (childSnapshot) {
-            numScores++;
-            let thisScore = childSnapshot.val().score;
-            let thisUserId = childSnapshot.val().userId;
-            let thisUsername = childSnapshot.val().username;
-            let thisDate = childSnapshot.val().date;
-            let isCurrentUser = (thisUserId === userId);
+//     // leaderboardRef
+//     leaderboardsRef[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
+//         snapshot.forEach(function (childSnapshot) {
+//             numScores++;
+//             let thisScore = childSnapshot.val().score;
+//             let thisUserId = childSnapshot.val().userId;
+//             let thisUsername = childSnapshot.val().username;
+//             let thisDate = childSnapshot.val().date;
+//             let isCurrentUser = (thisUserId === userId);
 
-            // If we want users with the same score to show up as the same rank, then uncomment the following if statement.
-            // if (thisScore != prevScore) {
-            thisRank++;
-            // }
-            prevScore = thisScore;
+//             // If we want users with the same score to show up as the same rank, then uncomment the following if statement.
+//             // if (thisScore != prevScore) {
+//             thisRank++;
+//             // }
+//             prevScore = thisScore;
 
-            if (numScores <= numRows) {
-                appendScore(leaderboard, thisRank, thisScore, thisUserId, thisUsername, thisDate, isCurrentUser);
-            }
+//             if (numScores <= numRows) {
+//                 appendScore(leaderboard, thisRank, thisScore, thisUserId, thisUsername, thisDate, isCurrentUser);
+//             }
 
-            if (isCurrentUser) {
-                // if (thisRank > 100) {
-                    renderCurrentUserScore(thisRank, thisScore, thisDate);
-                // }
-            }
-        });
-    }).then(() => {
-        renderLeaderboard(innerWrapper, leaderboard);
-    });
-}
+//             if (isCurrentUser) {
+//                 // if (thisRank > 100) {
+//                     renderCurrentUserScore(thisRank, thisScore, thisDate);
+//                 // }
+//             }
+//         });
+//     }).then(() => {
+//         renderLeaderboard(innerWrapper, leaderboard);
+//     });
+// }
 
 function renderCurrentUserScore(rank, score, date) {
     let tableFoot = document.getElementById('leaderboard-foot');
@@ -343,13 +333,13 @@ function appendScore(leaderboard, rank, score, userId, username, date, isCurrent
     leaderboard.push(scoreObject);
 }
 
-function addRandomScores(numberUsers) {
+function addRandomScores(numberUsers, leaderboard) {
     for (let i = 0; i < numberUsers; i++) {
-        addRandomScore();
+        addRandomScore(leaderboard);
     }
 }
 
-function addRandomScore() {
+function addRandomScore(leaderboard) {
     let addingScore = Math.floor(Math.random() * Math.floor(200)) + 1;
     let addingDate = new Date() / 1000
 
@@ -361,5 +351,5 @@ function addRandomScore() {
         'date': addingDate
     }
 
-    leaderboardRef.push(scoreObject);
+    leaderboardRefs[leaderboard].push(scoreObject);
 }

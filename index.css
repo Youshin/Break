@@ -66,11 +66,13 @@ p
 }
 
 .fixed tr:nth-child(2n) {
-    background-color: #8e8297
+    /* background-color: #8e8297 */
+    background-color: #DDD;
 }
 
 .fixed tr:nth-child(odd) {
-    background-color: #4d4c59
+    /* background-color: #4d4c59 */
+    background-color: #FFF;
 }
 
 .fixed tr:hover {
@@ -86,7 +88,8 @@ p
 }
 
 .fixed th {
-    background-color: #4c3a6e;
+    /* background-color: #4c3a6e; */
+    background-color: #DDD;
     padding: 5px 10px
 }
 

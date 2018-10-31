@@ -86,10 +86,12 @@ $(function () {
                 if (balls[m].x > WIDTH - radius || balls[m].x < 0 + radius) {
                     balls[m].dx = -balls[m].dx;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
                 if (balls[m].y < 0 + radius) {
                     balls[m].dy = -balls[m].dy;
                     balls[m].bounced = 1;
+                    playPop1();
                 }
 
 
@@ -117,6 +119,7 @@ $(function () {
                             balls[j].x = balls[firstBallOnGroundIndex].x;
                             balls[j].y = balls[firstBallOnGroundIndex].y;
                         }
+                        playWoosh();
                         //bricklevel++;
                         gameOn = false;
                         NROWS++;
@@ -155,6 +158,12 @@ $(function () {
 
         //game over condition
         if (NROWS >= 100) { // || time <= 0) {
+            if (!gameoff) {
+                playGameOver();
+                if (auth.currentUser != null) {
+                    updateHighScore(auth.currentUser.uid, score, 2);
+                }
+            }
             gameOn = true;
             gameoff = true;
             gameover();
@@ -189,8 +198,12 @@ $(function () {
                     if (bricks[row][col].number == 0) {
                         bricks[row][col].appear = 0;
                         score++;
+                        playPop2();
+                    } else {
+                        playPop1();
                     }
                 } else if (bricks[row][col].appear == 2) {
+                    playDing();
                     ballCount++;
                     aNewBall = {};
                     aNewBall.dx = 0;
@@ -201,6 +214,7 @@ $(function () {
                     balls.push(aNewBall);
                     bricks[row][col].appear = 0;
                 } else if (bricks[row][col].appear == 3) {
+                    playDing();
                     bomb(row, col);
                 }
             }
@@ -449,4 +463,12 @@ $(function () {
     init_bricks();
 
     setInterval(draw, 1000 / 60);
+
+    let clicked = false;
+    document.body.onmousedown = function() {
+        if (!clicked) {
+            playMusic();
+            clicked = true;
+        }
+    }
 });
