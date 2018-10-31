@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
-  
+      <link rel="stylesheet" type="text/css" href="index.css">
 
 
 </head>
@@ -45,6 +45,13 @@
                   <li>
                       <a href="./item.html">Item mode</a>
                   </li>
+                 
+                    <li>
+                        <a href="#" onclick="toggleLeaderboard()">Leaderboard</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="toggleBugSubmit()">Submit a bug</a>
+                    </li>
                    <li>
                       <a id="joinmenu" href="./signup.html">sign up</a>
                   </li>
@@ -207,5 +214,45 @@
 </script>
 
 
+    <div id="leaderboard-wrapper" class="hidden">
+        <button id="day" onclick="setFilter(0)">Last day</button>
+        <button id="week" onclick="setFilter(1)">Last week</button>
+        <button id="month" onclick="setFilter(2)">Last month</button>
+        <button id="year" onclick="setFilter(3)">Last year</button>
+        <button id="clear" onclick="clearFilter()">Clear Filter</button>
+        <button id="classic" onclick="chooseGameMode(0)">Classic</button>
+        <button id="timed" onclick="chooseGameMode(1)">Timed</button>
+        <button id="item" onclick="chooseGameMode(2)">Item</button>
+        <button id="refresh" onclick="refreshLB()">Refresh</button>
+            <table id="leaderboard-table" class="fixed">
+                <thead id="leaderboard-head">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+                <tfoot id="leaderboard-foot"></tfoot>
+                <!-- <tfoot id="leaderboard-foot"><tr><td>105</td><td>You</td><td>16</td><td>2018-8-5</td></tr></tfoot> -->
+            </table>
+        </div>
+
+        <div id="submit-bug-wrapper" class="container hidden">
+                <h1>Report a bug</h1>
+                
+                <div class="form-group">
+                  <label for="email">Enter bug details and the information will be sent to us to fix.</label>
+                  <textarea id='submit-bug-text' class="form-control"></textarea>
+                </div>
+
+                <button id="submit-bug-button" type="button" class="btn btn-default" onclick="submitBug()">Submit</button>
+        </div>
+
 </body>
+
+<script src="./js/leaderboard.js"></script>
+    <script src="./js/bug.js"></script>
+
 </html>

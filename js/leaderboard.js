@@ -1,6 +1,6 @@
-var fire = firebase.initializeApp(config);
-let databaseRef = fire.database();
-let auth = fire.auth();
+//var fire = firebase.initializeApp(config);
+let databaseRef = firebase.database();
+let auth = firebase.auth();
 
 let leaderboardRefs = [databaseRef.ref('classic_leaderboard'), databaseRef.ref('timed_leaderboard'), databaseRef.ref('item_leaderboard')];
 
