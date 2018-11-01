@@ -2,6 +2,9 @@ let bugsRef = databaseRef.ref('bugs');
 
 function toggleBugSubmit() {
     document.getElementById('submit-bug-wrapper').classList.toggle('hidden');
+    document.getElementById('leaderboard-wrapper').classList.add('hidden');
+    document.getElementById('volume-wrapper').classList.add('hidden');
+    document.getElementById('profile-wrapper').classList.add('hidden');
 }
 
 function submitBug() {

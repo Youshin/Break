@@ -57,6 +57,9 @@
                     <li>
                         <a href="#" onclick="toggleLeaderboard()">Leaderboard</a>
                     </li>
+                    <li id='profile-link'>
+                        <a href="#" onclick="toggleProfile()">Profile</a>
+                    </li>
                     <li>
                         <a href="#" onclick="toggleBugSubmit()">Submit a bug</a>
                     </li>
@@ -83,6 +86,35 @@
     <h2 id="score"></h2>
     <canvas id="canvas" width="500px" height="800px"></canvas>
 
+    <div id='profile-wrapper' class='hidden'>
+        <h1>Profile</h1>
+        <!-- change username form -->
+        <!-- <label>Change Username</label>
+        <form id="update-username-form">
+            <input id='new-username' type='text' placeholder="new username">
+            <input type="submit">
+        </form> -->
+
+        <!-- reset password form -->
+        <!-- <label>Update Password</label>
+        <form id="update-password">
+                <input id='old-password' type='password' placeholder="old password">
+                <input id='new-password' type='password' placeholder="new password">
+                <input id='new-password2' type='password' placeholder="confirm new password">
+                <input type="submit">
+        </form> -->
+
+        <label>Ball Color</label>
+        <select id="select-ball-color" onchange="updateBallColor()">
+            <option value="Black">Black</option>
+            <!-- load other available colors from the users profile -->
+            <!-- users getting certain high scores in different game modes will unlock different colored balls. -->
+            <!-- default black, 50 in classic = red, 100 classic = blue, 50 timed = pink, 100 timed = green, 50 item = yellow, 100 item =  -->
+            <!-- keep track of current color in database, whenever game starts, display balls as current color -->
+        </select>
+        <span id='select-ball-color-success-message' class="hidden">Ball color updated successfully</span>
+    </div>
+
     <div id='volume-wrapper' class='hidden'>
         <span><b>Volume Options</b></span>
         <br>
@@ -102,15 +134,15 @@
     </div>
 
     <div id="leaderboard-wrapper" class="hidden">
-        <button id="day" onclick="setFilter(0)">Last day</button>
-        <button id="week" onclick="setFilter(1)">Last week</button>
-        <button id="month" onclick="setFilter(2)">Last month</button>
-        <button id="year" onclick="setFilter(3)">Last year</button>
-        <button id="clear" onclick="clearFilter()">Clear Filter</button>
-        <button id="classic" onclick="chooseGameMode(0)">Classic</button>
-        <button id="timed" onclick="chooseGameMode(1)">Timed</button>
-        <button id="item" onclick="chooseGameMode(2)">Item</button>
-        <button id="refresh" onclick="refreshLB()">Refresh</button>
+        <button class="btn btn-default" id="day" onclick="setFilter(0)">Last day</button>
+        <button class="btn btn-default" id="week" onclick="setFilter(1)">Last week</button>
+        <button class="btn btn-default" id="month" onclick="setFilter(2)">Last month</button>
+        <button class="btn btn-default" id="year" onclick="setFilter(3)">Last year</button>
+        <button class="btn btn-default" id="clear" onclick="clearFilter()">Clear Filter</button>
+        <button class="btn btn-default" id="classic" onclick="chooseGameMode(0)">Classic</button>
+        <button class="btn btn-default" id="timed" onclick="chooseGameMode(1)">Timed</button>
+        <button class="btn btn-default" id="item" onclick="chooseGameMode(2)">Item</button>
+        <button class="btn btn-default" id="refresh" onclick="refreshLB()">Refresh</button>
             <table id="leaderboard-table" class="fixed">
                 <thead id="leaderboard-head">
                     <tr>
@@ -196,9 +228,10 @@
 </script>
 </body>
 <script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
+<script src="./js/globals.js"></script>
 <script src="./js/index.js"></script>
     <script src="./js/leaderboard.js"></script>
     <script src="./js/volume.js"></script>
     <script src="./js/bug.js"></script>
-
+    <script src="./js/profile.js"></script>
 </html>
