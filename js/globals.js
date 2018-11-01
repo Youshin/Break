@@ -1,0 +1,1 @@
+var currentBallColor = '#000';

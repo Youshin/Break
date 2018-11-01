@@ -28,7 +28,7 @@ $(function () {
         BRICKWIDTH = 0;
     var NROWS = 0,
         NCOLS = 0;
-        var firstClick = false;
+    var firstClick = false;
 
     function init() {
         //canvas 가져오기
@@ -218,7 +218,7 @@ $(function () {
     }
 
     function ball(x, y, r) {
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = currentBallColor;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2, true);
         ctx.closePath();
@@ -377,11 +377,13 @@ $(function () {
         }
     }
 
-
     init();
 
-    init_bricks();
+    setTimeout(function() {
+        setUserDefaultBallColor();
+    }, 1000);
 
+    init_bricks();
     setInterval(draw, 1000 / 60);
 
     let clicked = false;

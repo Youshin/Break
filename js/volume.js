@@ -5,6 +5,8 @@ let musicVolume = .5;
 function toggleVolumeOptions() {
     document.getElementById('volume-wrapper').classList.toggle('hidden');
     document.getElementById('leaderboard-wrapper').classList.add('hidden');
+    document.getElementById('submit-bug-wrapper').classList.add('hidden');
+    document.getElementById('profile-wrapper').classList.add('hidden');
 }
 
 function playMusic() {
