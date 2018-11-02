@@ -379,13 +379,9 @@ $(function () {
 
     init();
 
-    setTimeout(function() {
-        setUserDefaultBallColor();
-    }, 1000);
-
     init_bricks();
     setInterval(draw, 1000 / 60);
-
+    setUserDefaultBallColor();
     playMusic();
 
     let clicked = false;
