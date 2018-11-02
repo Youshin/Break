@@ -157,7 +157,7 @@ $(function () {
 
 
         //game over condition
-        if (NROWS >= 100) { // || time <= 0) {
+        if (NROWS >= 1000) { // || time <= 0) {
             if (!gameoff) {
                 playGameOver();
                 if (auth.currentUser != null) {
@@ -228,7 +228,7 @@ $(function () {
         if ((row + 1) < NROWS && (col + 1) < NCOLS &&
             bricks[row + 1][col + 1].appear == 1 &&
             (bricks[row + 1][col + 1].number=bricks[row + 1][col + 1].number-lev) <= 0) {
-            bricks[row + 1][col + 1].appear = 0;
+            //bricks[row + 1][col + 1].appear = 0;
             score++;
         }
         if ((row - 1) >= 0 && (col + 1) < NCOLS &&
@@ -246,7 +246,7 @@ $(function () {
         if ((row - 1) >= 0 && (col) < NCOLS &&
             bricks[row - 1][col].appear == 1 &&
             (bricks[row - 1][col].number = bricks[row - 1][col].number-lev) <= 0) {
-            bricks[row - 1][col].appear = 0;
+            //bricks[row - 1][col].appear = 0;
             score++;
         }
         if ((row + 1) < NROWS && (col - 1) >= 0 &&
@@ -264,7 +264,7 @@ $(function () {
         if ((row) < NROWS && (col + 1) < NCOLS &&
             bricks[row][col + 1].appear == 1 &&
             (bricks[row][col + 1].number=bricks[row][col + 1].number-lev) <= 0) {
-            bricks[row][col + 1].appear = 0;
+            //bricks[row][col + 1].appear = 0;
             score++;
         }
         if ((row) < NROWS && (col - 1) >= 0 &&
