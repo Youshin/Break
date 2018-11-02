@@ -48,6 +48,9 @@ function updateHighScore(userId, score, gameModeId) {
             alert('You got a new High score!');
             // Update user high score.
             if (gameModeId == 0) {
+                if (score == 10) {
+                    alert('You earned an achievement: Get a score of exactly 10 in classic mode.');
+                }
                 if (score > 50 && highScore < 50) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Yellow');
@@ -153,7 +156,8 @@ function getLeaderboardData(gameMode) {
     let prevScore = -1;
     let numScores = 0;
 
-    leaderboardRefs[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
+    // leaderboardRefs[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
+    leaderboardRefs[currentGameMode].once('value', (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
             numScores++;
             let thisScore = childSnapshot.val().score;
