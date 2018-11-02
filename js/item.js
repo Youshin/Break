@@ -467,10 +467,12 @@ $(function () {
     init_bricks();
     setInterval(draw, 1000 / 60);
 
+    playMusic();
+
     let clicked = false;
     document.body.onmousedown = function() {
         if (!clicked) {
-            playMusic();
+            // playMusic();
             clicked = true;
         }
     }
