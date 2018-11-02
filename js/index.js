@@ -144,7 +144,7 @@ $(function () {
 
 
         //game over condition
-        if (NROWS >= 15) { // || time <= 0) {
+        if (NROWS >= 17) { // || time <= 0) {
             if (!gameoff) {
                 playGameOver();
                 if (auth.currentUser != null) {
