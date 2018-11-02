@@ -182,8 +182,8 @@ $(function () {
                         bricks[row][col].appear = 0;
                         score++;
                         playPop2();
-                    } else {
-                        playPop1();
+                    // } else {
+                    //     playPop1();
                     }
                 } else if (bricks[row][col].appear == 2) {
                     playDing();
