@@ -45,12 +45,37 @@ function updateHighScore(userId, score, gameModeId) {
 
         // let highScore = snapshot.val().highScore;
         if (highScore == null || score > highScore) {
+            alert('You got a new High score!');
             // Update user high score.
             if (gameModeId == 0) {
+                if (score > 50 && highScore < 50) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Yellow');
+                }
+                if (score > 100 && highScore < 100) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Red');
+                }
                 usersRef.child(userId).update({classic_highscore: score});
             } else if (gameModeId == 1) {
+                if (score > 50 && highScore < 50) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Green');
+                }
+                if (score > 100 && highScore < 100) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Blue');
+                }
                 usersRef.child(userId).update({timed_highscore: score});
             } else {
+                if (score > 50 && highScore < 50) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Orange');
+                }
+                if (score > 100 && highScore < 100) {
+                    alert('You unlocked a new ball color!');
+                    unlockNewColor('Purple');
+                }
                 usersRef.child(userId).update({item_highscore: score});
             }
 
