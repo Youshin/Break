@@ -264,7 +264,7 @@ $(function () {
         if ((row) < NROWS && (col + 1) < NCOLS &&
             bricks[row][col + 1].appear == 1 &&
             (bricks[row][col + 1].number=bricks[row][col + 1].number-lev) <= 0) {
-            //bricks[row][col + 1].appear = 0;
+            bricks[row][col + 1].appear = 0;
             score++;
         }
         if ((row) < NROWS && (col - 1) >= 0 &&
@@ -359,7 +359,7 @@ $(function () {
                 if (brick.appear == 0) {
                     emptyPositions.push(j);
                 }
-                brick.number = Math.round(Math.random() * (+1 - +1) + +1);
+                brick.number = Math.round(Math.random() * (+2 - +1) + +1);
                 bricks[i][j] = brick; //Math.round(Math.random() + 0.2);
             }
             randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length));
