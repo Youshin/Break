@@ -187,7 +187,7 @@ function getLeaderboardData(gameMode) {
 
             if (isCurrentUser) {
                 if (thisRank > 100) {
-                    renderCurrentUserScore(thisRank, thisScore, thisDate);
+                    // renderCurrentUserScore(thisRank, thisScore, thisDate);
                 }
             }
         });
