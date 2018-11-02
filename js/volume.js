@@ -18,25 +18,25 @@ function playWoosh() {
 }
 
 function playPop1() {
-    let obj = document.createElement('audio');
-    obj.volume = getEffectsVolume();
-    let src = document.createElement('source');
-    src.src = '328117__greenvwbeetle__pop-8.flac';
-    src.type = 'audio/flac';
-    obj.appendChild(src);
-    obj.play();
-    // document.getElementById('pop1').play();
+    // let obj = document.createElement('audio');
+    // obj.volume = getEffectsVolume();
+    // let src = document.createElement('source');
+    // src.src = '328117__greenvwbeetle__pop-8.flac';
+    // src.type = 'audio/flac';
+    // obj.appendChild(src);
+    // obj.play();
+    document.getElementById('pop1').play();
 }
 
 function playPop2() {
-    let obj = document.createElement('audio');
-    obj.volume = getEffectsVolume();
-    let src = document.createElement('source');
-    src.src = '411642__inspectorj__pop-high-a-h1.wav';
-    src.type = 'audio/wav';
-    obj.appendChild(src);
-    obj.play();
-    // document.getElementById('pop2').play();
+    // let obj = document.createElement('audio');
+    // obj.volume = getEffectsVolume();
+    // let src = document.createElement('source');
+    // src.src = '411642__inspectorj__pop-high-a-h1.wav';
+    // src.type = 'audio/wav';
+    // obj.appendChild(src);
+    // obj.play();
+    document.getElementById('pop2').play();
 }
 
 function playUp1() {

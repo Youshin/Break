@@ -199,8 +199,8 @@ $(function () {
                         bricks[row][col].appear = 0;
                         score++;
                         playPop2();
-                    } else {
-                        playPop1();
+                    // } else {
+                    //     playPop1();
                     }
                 } else if (bricks[row][col].appear == 2) {
                     playDing();
@@ -460,17 +460,15 @@ $(function () {
 
     init();
 
-    setTimeout(function() {
-        setUserDefaultBallColor();
-    }, 1000);
-
     init_bricks();
     setInterval(draw, 1000 / 60);
+    setUserDefaultBallColor();
+    playMusic();
 
     let clicked = false;
     document.body.onmousedown = function() {
         if (!clicked) {
-            playMusic();
+            // playMusic();
             clicked = true;
         }
     }

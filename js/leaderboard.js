@@ -48,31 +48,34 @@ function updateHighScore(userId, score, gameModeId) {
             alert('You got a new High score!');
             // Update user high score.
             if (gameModeId == 0) {
-                if (score > 50 && highScore < 50) {
+                if (score == 10) {
+                    alert('You earned an achievement: Get a score of exactly 10 in classic mode.');
+                }
+                if (score >= 50 && highScore < 50) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Yellow');
                 }
-                if (score > 100 && highScore < 100) {
+                if (score >= 100 && highScore < 100) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Red');
                 }
                 usersRef.child(userId).update({classic_highscore: score});
             } else if (gameModeId == 1) {
-                if (score > 50 && highScore < 50) {
+                if (score >= 100 && highScore < 100) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Green');
                 }
-                if (score > 100 && highScore < 100) {
+                if (score >= 200 && highScore < 200) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Blue');
                 }
                 usersRef.child(userId).update({timed_highscore: score});
             } else {
-                if (score > 50 && highScore < 50) {
+                if (score >= 50 && highScore < 50) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Orange');
                 }
-                if (score > 100 && highScore < 100) {
+                if (score >= 100 && highScore < 100) {
                     alert('You unlocked a new ball color!');
                     unlockNewColor('Purple');
                 }
@@ -153,7 +156,8 @@ function getLeaderboardData(gameMode) {
     let prevScore = -1;
     let numScores = 0;
 
-    leaderboardRefs[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
+    // leaderboardRefs[currentGameMode].orderByChild('negativeScore').once('value', (snapshot) => {
+    leaderboardRefs[currentGameMode].once('value', (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
             numScores++;
             let thisScore = childSnapshot.val().score;
@@ -183,7 +187,7 @@ function getLeaderboardData(gameMode) {
 
             if (isCurrentUser) {
                 if (thisRank > 100) {
-                    renderCurrentUserScore(thisRank, thisScore, thisDate);
+                    // renderCurrentUserScore(thisRank, thisScore, thisDate);
                 }
             }
         });
