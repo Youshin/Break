@@ -121,12 +121,12 @@
           // User successfully signed in.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          alert(authResult);
-          alert(authResult.additionalUserInfo);
-         
+          //alert(authResult);
+          //alert(authResult.additionalUserInfo);
+         alert("ERROR: LOGGED IN WITH FACEBOOK");
           if(authResult.additionalUserInfo.isNewUser == true) {
             logUser(authResult);
-            console.log("user is new");
+            //console.log("user is new");
           }
           loginSuccess(authResult);
           return true;
