@@ -59,6 +59,10 @@ function unlockNewColor(color) {
     usersRef.child(auth.currentUser.uid).child('available-ball-colors').push(color);
 }
 
+function updatePassword() {
+    alert('Password updated successfully.');
+}
+
 // function GetUserSelectedColor() {
 //     console.log('color!');
 //     return 'red';

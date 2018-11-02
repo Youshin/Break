@@ -14,6 +14,6 @@ function submitBug() {
         alert('Enter at least 10 characters to submit a bug');
     } else {
         bugsRef.push({"text": bugText});
-        alert('Bug submitted!');
+        // alert('Bug submitted!');
     }
 }

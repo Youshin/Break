@@ -93,13 +93,16 @@
         </form> -->
 
         <!-- reset password form -->
-        <!-- <label>Update Password</label>
+        <label>Update Password</label>
         <form id="update-password">
-                <input id='old-password' type='password' placeholder="old password">
-                <input id='new-password' type='password' placeholder="new password">
-                <input id='new-password2' type='password' placeholder="confirm new password">
-                <input type="submit">
-        </form> -->
+            <input id='old-password' type='password' placeholder="old password">
+            <br>
+            <input id='new-password' type='password' placeholder="new password">
+            <br>
+            <input id='new-password2' type='password' placeholder="confirm new password">
+            <br>
+            <button onlick='updatePassword()'>Update</button>
+        </form>
 
         <label>Ball Color</label>
         <select id="select-ball-color" onchange="updateBallColor()">

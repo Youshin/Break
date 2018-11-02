@@ -166,8 +166,8 @@ $(function () {
                         bricks[row][col].appear = 0;
                         score++;
                         playPop2();
-                    } else {
-                        playPop1();
+                    // } else {
+                    //     playPop1();
                     }
                 }
             }
@@ -355,18 +355,16 @@ $(function () {
 
     init();
 
-    setTimeout(function() {
-        setUserDefaultBallColor();
-    }, 1000);
-
     init_bricks();
     setUserDefaultBallColor();
     setInterval(draw, 1000 / 60);
 
+    playMusic();
+
     let clicked = false;
     document.body.onmousedown = function() {
         if (!clicked) {
-            playMusic();
+            // playMusic();
             clicked = true;
         }
     }
