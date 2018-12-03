@@ -93,9 +93,9 @@ $(function () {
                     brick.number = bricklevel;
                     brickrow[j] = brick; //Math.round(Math.random() + 0.2);
                 }
-                randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
-                newBallPos = emptyPositions[randomEmptyPos];
-                brickrow[newBallPos].appear = 2;
+                //randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
+                //newBallPos = emptyPositions[randomEmptyPos];
+                //brickrow[newBallPos].appear = 1;
                 bricks.unshift(brickrow);
             }
 
@@ -263,9 +263,9 @@ $(function () {
                 brick.number = Math.round(Math.random() * (+3 - +1) + +1);
                 bricks[i][j] = brick; //Math.round(Math.random() + 0.2);
             }
-            randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length));
-            newBallPos = emptyPositions[randomEmptyPos];
-            bricks[i][newBallPos].appear = 2;
+            //randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length));
+            //newBallPos = emptyPositions[randomEmptyPos];
+            //bricks[i][newBallPos].appear = 1;
         }
     }
 
