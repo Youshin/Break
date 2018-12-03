@@ -185,7 +185,7 @@ $(function () {
         for (i = 0; i < balls.length; ++i) {
             var row = Math.floor((balls[i].y + radius) / (BRICKHEIGHT));
             var col = Math.floor((balls[i].x + radius) / (BRICKWIDTH));
-            if (row < NROWS && col < NCOLS) {
+            if (row < NROWS && col < NCOLS && row > -1 && col > -1) {
                 if (bricks[row][col].appear == 1) {
                     balls[i].dy = -balls[i].dy;
                     balls[i].bounced = 1;
