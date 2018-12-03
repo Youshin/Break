@@ -144,18 +144,18 @@ $(function () {
 
 
         //game over condition
-        if (NROWS >= 15) { // || time <= 0) {
-            if (!gameoff) {
-                playGameOver();
-                if (auth.currentUser != null) {
-                    updateHighScore(auth.currentUser.uid, score, 0);
-                }
-            }
-            gameOn = true;
-            gameoff = true;
-            gameover();
-            return;
-        }
+//        if (NROWS >= 15) { // || time <= 0) {
+//            if (!gameoff) {
+//                playGameOver();
+//                if (auth.currentUser != null) {
+//                    updateHighScore(auth.currentUser.uid, score, 0);
+//                }
+//            }
+//            gameOn = true;
+//            gameoff = true;
+//            gameover();
+//            return;
+//        }
 
         //draw bricks
         for (i = 0; i < NROWS; i++) {
@@ -166,6 +166,18 @@ $(function () {
                 if (bricks[i][j].appear == 1) {
                     rect(j * BRICKWIDTH, i * BRICKHEIGHT, BRICKWIDTH, BRICKHEIGHT, i, j);
                 }
+                if (bricks[i][j].appear != 0 && i > 20) {
+                    if (!gameoff) {
+                        playGameOver();
+                        if (auth.currentUser != null) {
+                            updateHighScore(auth.currentUser.uid, score, 2);
+                        }
+                    }
+                    gameOn = true;
+                    gameoff = true;
+                    gameover();
+                    return;
+                }
             }
         }
 
@@ -173,7 +185,7 @@ $(function () {
         for (i = 0; i < balls.length; ++i) {
             var row = Math.floor((balls[i].y + radius) / (BRICKHEIGHT));
             var col = Math.floor((balls[i].x + radius) / (BRICKWIDTH));
-            if (row < NROWS) {
+            if (row < NROWS && col < NCOLS) {
                 if (bricks[row][col].appear == 1) {
                     balls[i].dy = -balls[i].dy;
                     balls[i].bounced = 1;
@@ -206,7 +218,7 @@ $(function () {
     }
 
     function gameover() {
-        //rectgo(0, 0, WIDTH, HEIGHT, "black");
+        rectgo(0, 0, WIDTH, HEIGHT, "white");
         text("Game Over", "75px Comic Sans MS", 65, 300, "black");
         text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "black");
         //rectgo(200, 600, 100, 50, "white");

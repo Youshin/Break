@@ -150,6 +150,18 @@ $(function () {
                 if (bricks[i][j].appear == 1) {
                     rect(j * BRICKWIDTH, i * BRICKHEIGHT, BRICKWIDTH, BRICKHEIGHT, i, j);
                 }
+                if (bricks[i][j].appear != 0 && i > 20) {
+                    if (!gameoff) {
+                        playGameOver();
+                        if (auth.currentUser != null) {
+                            updateHighScore(auth.currentUser.uid, score, 1);
+                        }
+                    }
+                    gameOn = false;
+                    gameoff = true;
+                    gameover();
+                    return;
+                }
             }
         }
 
@@ -157,7 +169,7 @@ $(function () {
         for (i = 0; i < balls.length; ++i) {
             var row = Math.floor((balls[i].y + radius) / (BRICKHEIGHT));
             var col = Math.floor((balls[i].x + radius) / (BRICKWIDTH));
-            if (row < NROWS) {
+            if (row < NROWS && col < NCOLS) {
                 if (bricks[row][col].appear == 1) {
                     balls[i].dy = -balls[i].dy;
                     balls[i].bounced = 1;
@@ -284,12 +296,12 @@ $(function () {
         mx = e.pageX - this.offsetLeft; // mouse x position
         my = e.pageY - this.offsetTop;
         if (!gameoff) {
-            
+
             //pause
             if (mx > 0 && mx < 60 && my > 770 && my < 800 && !gamepaused && gameOn == true) {
                 gameOn = false;
                 gamepaused = 1;
-            } else if (mx > 0 && mx < 60 && my > 770 && my < 800 && gamepaused == 1 && gameOn == false){
+            } else if (mx > 0 && mx < 60 && my > 770 && my < 800 && gamepaused == 1 && gameOn == false) {
                 gameOn = true;
                 gamepaused = 0;
             } else if (!gamepaused) {
@@ -355,7 +367,7 @@ $(function () {
 
     init();
 
-    setTimeout(function() {
+    setTimeout(function () {
         setUserDefaultBallColor();
     }, 1000);
 
@@ -364,7 +376,7 @@ $(function () {
     setInterval(draw, 1000 / 60);
 
     let clicked = false;
-    document.body.onmousedown = function() {
+    document.body.onmousedown = function () {
         if (!clicked) {
             playMusic();
             clicked = true;

@@ -141,7 +141,7 @@ $(function () {
                             brickrow[newBallPos].appear = 2;
                             bricklevel++;
                             item = 1;
-                        }                    
+                        }
                         if (item % 2 == 0) {
                             randomEmptyPos = Math.floor(Math.random() * (emptyPositions.length)); // to put an extra new ball in a random empty position
                             newBallPos = emptyPositions[randomEmptyPos];
@@ -156,19 +156,19 @@ $(function () {
         }
 
 
-        //game over condition
-        if (NROWS >= 100) { // || time <= 0) {
-            if (!gameoff) {
-                playGameOver();
-                if (auth.currentUser != null) {
-                    updateHighScore(auth.currentUser.uid, score, 2);
-                }
-            }
-            gameOn = true;
-            gameoff = true;
-            gameover();
-            return;
-        }
+//        //game over condition
+//        if (NROWS >= 100) { // || time <= 0) {
+//            if (!gameoff) {
+//                playGameOver();
+//                if (auth.currentUser != null) {
+//                    updateHighScore(auth.currentUser.uid, score, 2);
+//                }
+//            }
+//            gameOn = true;
+//            gameoff = true;
+//            gameover();
+//            return;
+//        }
 
         //draw bricks
         for (i = 0; i < NROWS; i++) {
@@ -182,7 +182,18 @@ $(function () {
                 if (bricks[i][j].appear == 1) {
                     rect(j * BRICKWIDTH, i * BRICKHEIGHT, BRICKWIDTH, BRICKHEIGHT, i, j);
                 }
-
+                if (bricks[i][j].appear != 0 && i > 20) {
+                    if (!gameoff) {
+                        playGameOver();
+                        if (auth.currentUser != null) {
+                            updateHighScore(auth.currentUser.uid, score, 2);
+                        }
+                    }
+                    gameOn = true;
+                    gameoff = true;
+                    gameover();
+                    return;
+                }
             }
         }
 
@@ -190,10 +201,13 @@ $(function () {
         for (i = 0; i < balls.length; ++i) {
             var row = Math.floor((balls[i].y + radius) / (BRICKHEIGHT));
             var col = Math.floor((balls[i].x + radius) / (BRICKWIDTH));
-            if (row < NROWS) {
+            if (row < NROWS && col < NCOLS) {
                 if (bricks[row][col].appear == 1) {
                     balls[i].dy = -balls[i].dy;
                     balls[i].bounced = 1;
+
+                    //console.log(balls[i].dy);
+
                     bricks[row][col].number--; // = bricks[row][col].number - 1;
                     if (bricks[row][col].number == 0) {
                         bricks[row][col].appear = 0;
@@ -223,60 +237,60 @@ $(function () {
 
     function bomb(row, col) {
         bricks[row][col].appear = 0;
-        lev = Math.ceil(bricklevel/2);
+        lev = Math.ceil(bricklevel / 2);
 
         if ((row + 1) < NROWS && (col + 1) < NCOLS &&
             bricks[row + 1][col + 1].appear == 1 &&
-            (bricks[row + 1][col + 1].number=bricks[row + 1][col + 1].number-lev) <= 0) {
+            (bricks[row + 1][col + 1].number = bricks[row + 1][col + 1].number - lev) <= 0) {
             bricks[row + 1][col + 1].appear = 0;
             score++;
         }
         if ((row - 1) >= 0 && (col + 1) < NCOLS &&
             bricks[row - 1][col + 1].appear == 1 &&
-            (bricks[row - 1][col + 1].number=bricks[row - 1][col + 1].number-lev) <= 0) {
+            (bricks[row - 1][col + 1].number = bricks[row - 1][col + 1].number - lev) <= 0) {
             bricks[row - 1][col + 1].appear = 0;
             score++;
         }
         if ((row + 1) < NROWS && (col) < NCOLS &&
             bricks[row + 1][col].appear == 1 &&
-            (bricks[row + 1][col].number=bricks[row + 1][col].number-lev) <= 0) {
+            (bricks[row + 1][col].number = bricks[row + 1][col].number - lev) <= 0) {
             bricks[row + 1][col].appear = 0;
             score++;
         }
         if ((row - 1) >= 0 && (col) < NCOLS &&
             bricks[row - 1][col].appear == 1 &&
-            (bricks[row - 1][col].number = bricks[row - 1][col].number-lev) <= 0) {
+            (bricks[row - 1][col].number = bricks[row - 1][col].number - lev) <= 0) {
             bricks[row - 1][col].appear = 0;
             score++;
         }
         if ((row + 1) < NROWS && (col - 1) >= 0 &&
             bricks[row + 1][col - 1].appear == 1 &&
-            (bricks[row + 1][col - 1].number=bricks[row + 1][col - 1].number-lev) <= 0) {
+            (bricks[row + 1][col - 1].number = bricks[row + 1][col - 1].number - lev) <= 0) {
             bricks[row + 1][col - 1].appear = 0;
             score++;
         }
         if ((row - 1) >= 0 && (col - 1) >= 0 &&
             bricks[row - 1][col - 1].appear == 1 &&
-            (bricks[row - 1][col - 1].number=bricks[row - 1][col - 1].number-lev) <= 0) {
+            (bricks[row - 1][col - 1].number = bricks[row - 1][col - 1].number - lev) <= 0) {
             bricks[row - 1][col - 1].appear = 0;
             score++;
         }
         if ((row) < NROWS && (col + 1) < NCOLS &&
             bricks[row][col + 1].appear == 1 &&
-            (bricks[row][col + 1].number=bricks[row][col + 1].number-lev) <= 0) {
+            (bricks[row][col + 1].number = bricks[row][col + 1].number - lev) <= 0) {
             bricks[row][col + 1].appear = 0;
             score++;
         }
         if ((row) < NROWS && (col - 1) >= 0 &&
             bricks[row][col - 1].appear == 1 &&
-            (bricks[row][col - 1].number=bricks[row][col - 1].number-lev) <= 0) {
+            (bricks[row][col - 1].number = bricks[row][col - 1].number - lev) <= 0) {
             bricks[row][col - 1].appear = 0;
             score++;
         }
     }
 
     function gameover() {
-        //rectgo(0, 0, WIDTH, HEIGHT, "black");
+        rectgo(0, 0, WIDTH, HEIGHT, "white");
         text("Game Over", "75px Comic Sans MS", 65, 300, "black");
         text("SCORE: " + score, "35px Comic Sans MS", 100, 400, "black");
         //rectgo(200, 600, 100, 50, "white");
@@ -460,7 +474,7 @@ $(function () {
 
     init();
 
-    setTimeout(function() {
+    setTimeout(function () {
         setUserDefaultBallColor();
     }, 1000);
 
@@ -468,7 +482,7 @@ $(function () {
     setInterval(draw, 1000 / 60);
 
     let clicked = false;
-    document.body.onmousedown = function() {
+    document.body.onmousedown = function () {
         if (!clicked) {
             playMusic();
             clicked = true;
